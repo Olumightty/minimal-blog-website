@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | My Blog</title>
+    <link rel="stylesheet" href="/stylesheets/404.css">
+    <link rel="stylesheet" href="/stylesheets/common.css">
+</head>
+<body>
+    <div class="container">
+        <div class="error-container">
+            <h1 class="error-code">4<span class="digit-animation">0</span>4</h1>
+            <div class="paper-plane-container">
+                <div class="paper-plane"></div>
+            </div>
+            <h2 class="error-message">Oops! Page not found</h2>
+            <p class="error-description">The page you're looking for seems to have wandered off.</p>
+            <div class="suggestions">
+                <h3>You might want to:</h3>
+                <ul id="suggestion-list">
+                    <li>Check the URL for typos</li>
+                    <li>Go back to our <a href="/">homepage</a></li>
+                    <li>Explore our <a href="/article">recent articles</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <%- include('partials/footer') %>
+    <script src="/javascripts/404.js"></script>
+</body>
+</html>

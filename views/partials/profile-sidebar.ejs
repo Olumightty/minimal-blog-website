@@ -1,0 +1,62 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="user-preview">
+        <img src="" alt="User Avatar" class="sidebar-avatar">
+        <div class="user-info">
+          <h3></h3>
+          <span class="user-role">Writer</span>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li ><a class="active" href="/user/profile"><span class="icon">👤</span> Profile</a></li>
+        <li><a href="/user/settings"><span class="icon">⚙️</span> Settings</a></li>
+        <li><a href="/user/articles"><span class="icon">📝</span> My Articles</a></li>
+        <li><a href="/user/drafts"><span class="icon">📋</span> Drafts</a></li>
+        <li><a href="/user/stats"><span class="icon">📊</span> Statistics</a></li>
+        <li><a href="/user/bookmarks"><span class="icon">🔖</span> Bookmarks</a></li>
+        <li><a href="/user//notifications"><span class="icon">🔔</span> Notifications</a></li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/help" class="help-link"><span class="icon">❓</span> Help Center</a>
+      <a href="/logout" class="logout-link"><span class="icon">🚪</span> Log Out</a>
+    </div>
+  </aside>
+
+
+<script>
+  
+  document.addEventListener('DOMContentLoaded', async function() {
+    const avatarImage = document.querySelector('.sidebar-avatar');
+    try {
+      const response = await fetch('/user/avatar', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      const data = await response.json();
+      if(data.avatar) avatarImage.setAttribute('src', data.avatar);
+      if(data.name) document.querySelector('.user-info h3').textContent = data.name;
+    } catch (error) {
+      showError('Failed to load avatar');
+    }
+
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+    const currentPath = window.location.pathname
+    console.log(currentPath)
+    
+    navLinks.forEach(link => {
+      console.log(link.getAttribute('href'))
+      if (`/${currentPath}`.includes(link.getAttribute('href'))) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+     // Get the first part of the path;
+  })
+  
+</script>

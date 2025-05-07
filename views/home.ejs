@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Minimal Blog</title>
+    <link rel="stylesheet" href="/stylesheets/home.css">
+    <link rel="stylesheet" href="/stylesheets/common.css">
+    <link rel="stylesheet" href="/stylesheets/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    <main>
+        <section class="posts">
+
+            <% if (recentPosts.length === 0) { %>
+                <div class="no-articles">
+                   <p>We have nothing to show. No posts found.</p>
+                    <a href="/article/new" class="new-article-btn">+ New Article</a></li>
+                </div>
+            <% } %>
+             <% if (recentPosts.length > 0) {recentPosts.forEach((post) => { %>
+                <article>
+                    <div class="article-image" style="background-image: url('<%= post.imageUrl %>')"></div>
+                    <div class="article-content">
+                        <p class="article-date"><%= post.created_at.toDateString()%></p>
+                        <h2 class="article-title"><%= post.title %></h2>
+                        <p class="article-excerpt"><%= post.summary %></p>
+                        <a href="/article/<%= post.slug %>" class="read-more">Continue Reading →</a>
+                    </div>
+                </article>
+             <% })} %>
+
+        </section>
+            
+
+
+        <aside>
+            <div class="sidebar-section about-me">
+                <h3 class="sidebar-title">About Me</h3>
+                <p>Hello! I'm a writer and designer passionate about creating meaningful, minimal experiences. This blog explores design, technology, and mindful living.</p>
+                <a href="/about" class="read-more">More About Me →</a>
+            </div>
+
+            <div class="sidebar-section categories">
+                <h3 class="sidebar-title">Categories</h3>
+                <ul>
+                    <% countByCategory.forEach((category) => { %>
+                        <li><a href="/articles?category=<%= category.category %>"><%= category.category.charAt(0).toUpperCase() + category.category.slice(1) %> <span class="category-count"><%= category.count %></span></a></li>
+                    <% }) %>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Subscribe</h3>
+                <p>Stay updated with the latest posts.</p>
+                <form class="subscribe-form">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </aside>
+    </main>
+    <%- include('partials/toaster') %>
+<%- include('partials/footer') %>

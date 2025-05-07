@@ -1,0 +1,161 @@
+/* Reset and base styles */
+
+
+
+
+
+/* Main content - Home page */
+main:not(.articles-page) {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 50px;
+    margin-bottom: 50px;
+}
+
+
+/* Articles - Home page */
+.posts {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+article {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.article-image {
+    height: 240px;
+    background-color: #eee;
+    background-position: center;
+    background-size: cover;
+}
+
+.article-content {
+    padding: 30px;
+}
+
+.article-date {
+    color: #888;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.article-title {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.article-excerpt {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.read-more {
+    display: inline-block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #0066cc;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar - Home page */
+aside {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.sidebar-section {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+}
+
+.sidebar-title {
+    font-size: 1.25rem;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    font-weight: 500;
+}
+
+.about-me p {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.7;
+}
+
+.categories ul {
+    list-style: none;
+}
+
+.categories li {
+    margin-bottom: 10px;
+}
+
+.categories a {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.category-count {
+    background: #f1f1f1;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* Subscribe form */
+.subscribe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.subscribe-form input {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+
+.subscribe-form button {
+    background: #0066cc;
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.subscribe-form button:hover {
+    background: #0055aa;
+}
+
+
+/* Responsive design */
+

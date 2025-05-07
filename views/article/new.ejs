@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/new-article.css">
+    <link rel="stylesheet" href="/stylesheets/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>New Article | Blog</title>
+</head>
+<body>
+    
+
+        <a href="/"><button type="button" class="btn btn-outline btn-back"><i class="fas fa-arrow-left"></i></button></a>
+   
+        <section class="new-article-section">
+            <h1>Create New Article</h1>
+            
+            <form id="new-article-form" class="new-article-form" action="/new-article" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="article-title">Title</label>
+                    <input type="text" id="article-title" name="title" placeholder="Enter article title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="article-category">Category</label>
+                    <select id="article-category" name="category" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="design">Design</option>
+                        <option value="technology">Technology</option>
+                        <option value="productivity">Productivity</option>
+                        <option value="creativity">Creativity</option>
+                        <option value="lifestyle">Lifestyle</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <img id="image-preview" class="hidden" src="" alt="">
+                    <label for="article-featured-image">Featured Image</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="article-featured-image" name="image" accept="image/*">
+                        <div class="file-input-placeholder">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Drop an image here or click to upload</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="article-summary">Summary</label>
+                    <textarea id="article-summary" name="summary" rows="3" placeholder="Brief summary of your article" required></textarea>
+                </div>
+                
+                <!-- <div class="form-group">
+                    <label for="article-content">Content</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" title="Bold"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" title="Italic"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn" title="Heading"><i class="fas fa-heading"></i></button>
+                        <button type="button" class="toolbar-btn" title="Link"><i class="fas fa-link"></i></button>
+                        <button type="button" class="toolbar-btn" title="Quote"><i class="fas fa-quote-right"></i></button>
+                        <button type="button" class="toolbar-btn" title="Code"><i class="fas fa-code"></i></button>
+                        <button type="button" class="toolbar-btn" title="List"><i class="fas fa-list-ul"></i></button>
+                        <button type="button" class="toolbar-btn" title="Image"><i class="fas fa-image"></i></button>
+                    </div>
+                    <textarea id="article-content" name="content" rows="12" placeholder="Write your article here..." required></textarea>
+                </div> -->
+
+                <div class="form-group">
+                    <%- include('../partials/editor') %>
+                </div> 
+
+                <div class="form-group tags-input-group">
+                    <label for="article-tags">Tags</label>
+                    <div class="tags-input-container">
+                        <input type="text" id="article-tags" placeholder="Add a tag and press Enter">
+                        <!-- <input id="tags" type='hidden' name='tags'> -->
+                        <div class="tags-container"></div>
+                    </div>
+                    <small>Press Enter after each tag</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline btn-cancel">Cancel</button>
+                    <div>
+                        <button type="button" class="btn btn-outline" id="btn-draft">Save Draft</button>
+                        <button type="submit" class="btn btn-primary" id="btn-publish">Publish Article</button>
+                    </div>
+                    
+                </div>
+            </form>
+        </section>
+
+        <%- include('../partials/toaster') %>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.5/purify.min.js" integrity="sha512-/CUtA84sWWqWEBejNrrtWa7Yc4cth3Ome2ymvCKOo9YcZ4sh98tndUy4LutE2xGcAgD4fyz16y+gSyJdGCB5ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+
+
+    <script aria-hidden="true">
+        // Simple tags input functionality
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tagsInput = document.getElementById('article-tags');
+            // const saveTags = document.getElementById('tags');
+            const tagsContainer = document.querySelector('.tags-container');
+            const tagsArray = [];
+
+            tagsInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && tagsInput.value.trim() !== '') {
+                    e.preventDefault();
+                    const tag = tagsInput.value.trim();
+                    
+                    if (!tagsArray.includes(tag)) {
+                        tagsArray.push(tag);
+                        
+                        const tagElement = document.createElement('div');
+                        tagElement.classList.add('tag');
+                        tagElement.innerHTML = `
+                            <span class="tag-text">${tag}</span>
+                            <span class="tag-close">&times;</span>
+                        `;
+                        tagsContainer.appendChild(tagElement);
+                        
+                        tagElement.querySelector('.tag-close').addEventListener('click', function() {
+                            const index = tagsArray.indexOf(tag);
+                            if (index !== -1) {
+                                tagsArray.splice(index, 1);
+                            }
+                            tagsContainer.removeChild(tagElement);
+                        });
+                    }
+                    
+                    tagsInput.value = '';
+                    // saveTags.value = JSON.stringify(tagsArray);
+                }
+            });
+
+            // File input preview
+            const fileInput = document.getElementById('article-featured-image');
+            const fileInputPlaceholder = document.querySelector('.file-input-placeholder');
+            const imagePreview = document.getElementById('image-preview');
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.setAttribute('src', e.target.result)
+                        imagePreview.setAttribute('alt', file.name);
+                        imagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                    fileInputPlaceholder.innerHTML = `<span>${file.name}</span>`;
+                    fileInputPlaceholder.classList.add('has-file');
+                } else {
+                    fileInputPlaceholder.innerHTML = `
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Drop an image here or click to upload</span>
+                    `;
+                    fileInputPlaceholder.classList.remove('has-file');
+                }
+            });
+
+            // Form submission
+            const form = document.getElementById('new-article-form');
+            const publishButton = document.getElementById('btn-publish');
+            publishButton.addEventListener('click', async function(e) {
+                e.preventDefault();
+                publishButton.disabled = true;
+                publishButton.innerHTML = 'Publishing...';
+                const formData = new FormData(form);
+                formData.set('tags', tagsArray);
+
+                
+                const body = formData.get('content').trim()
+                
+                
+                const post = {
+                    title: formData.get('title'),
+                    category: formData.get('category'),
+                    summary: formData.get('summary'),
+                    body: DOMPurify.sanitize(formData.get('content')), //prevent xss atack
+                    tags: formData.get('tags'),
+                    image: formData.get('image'),
+                    status: 'published'
+                };
+
+                if (post.body.replace(/<[^>]*>/g, '').trim() === '') {
+                    showError('Article body cannot be empty');
+                    publishButton.disabled = false;
+                    publishButton.innerHTML = 'Publish Article';
+                    return;
+                }
+
+                if(post.tags.trim() === ''){
+                    showError('At least one tag is required');
+                    publishButton.disabled = false;
+                    publishButton.innerHTML = 'Publish Article';
+                    return;
+                }
+                try {
+                    const response = await axios.post('/article/new', post, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+                    const { slug } = response.data;
+                    if (slug) {
+                        window.location.href = `/article/${slug}`;
+                    }
+                    else{
+                        throw new Error('Error creating article');
+                    }
+                } catch (error) {
+                    showError('Error creating article');
+                    publishButton.disabled = false;
+                    publishButton.innerHTML = 'Publish Article';
+                }
+                
+                
+            });
+
+
+
+            const draftButton = document.getElementById('btn-draft');
+            draftButton.addEventListener('click', async function(e) {
+                e.preventDefault();
+                draftButton.disabled = true;
+                draftButton.innerHTML = 'Saving...';
+                const formData = new FormData(form);
+                formData.set('tags', tagsArray);
+
+                
+                const body = formData.get('content').trim()
+                
+                
+                const post = {
+                    title: formData.get('title'),
+                    category: formData.get('category'),
+                    summary: formData.get('summary'),
+                    body: DOMPurify.sanitize(formData.get('content')), //prevent xss atack
+                    tags: formData.get('tags'),
+                    image: formData.get('image'),
+                    status: 'draft'
+                };
+
+                if (post.body.replace(/<[^>]*>/g, '').trim() === '') {
+                    showError('Article body cannot be empty');
+                    draftButton.disabled = false;
+                    draftButton.innerHTML = 'Save Draft';
+                    return;
+                }
+
+                if(post.tags.trim() === ''){
+                    showError('At least one tag is required');
+                    draftButton.disabled = false;
+                    draftButton.innerHTML = 'Save Draft';
+                    return;
+                }
+                try {
+                    const response = await axios.post('/article/new', post, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+                    const { slug } = response.data;
+                    if (slug) {
+                        window.location.href = `/article/${slug}`;
+                    }
+                    else{
+                        throw new Error('Error creating article');
+                    }
+                } catch (error) {
+                    showError('Error creating article');
+                    draftButton.disabled = false;
+                    draftButton.innerHTML = 'Save Draft';
+                }
+                
+                
+            });
+
+            
+        });
+    </script>
+
+    
+<%- include('../partials/footer') %>

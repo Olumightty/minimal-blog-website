@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles | Minimal Blog</title>
+    <link rel="stylesheet" href="/stylesheets/articles.css">
+    <link rel="stylesheet" href="/stylesheets/common.css">
+    <link rel="stylesheet" href="/stylesheets/responsive.css">
+</head>
+<body>
+    
+    <%- include('../partials/navbar') %>
+    <main class="articles-page">
+    <section class="articles-header">
+        <h2>All Articles</h2>
+        <div class="filter-controls">
+            <label for="category-filter">Filter by:</label>
+            <select  id="category-filter">
+                <option value="all">All Categories</option>
+                <option value="design">Design</option>
+                <option value="technology">Technology</option>
+                <option value="lifestyle">Lifestyle</option>
+                <option value="productivity">Productivity</option>
+                <option value="creativity">Creativity</option>
+            </select>
+        </div>
+    </section>
+
+
+    <section class="articles-grid">
+        
+        <% posts.forEach((post) =>{ %>
+            <article class="article-card">
+                <div class="article-image" style="background-image: url('<%= post.imageUrl %>')"></div>
+                <div class="article-content">
+                    <p class="article-date"><%= post.created_at.toDateString()%></p>
+                    <h2 class="article-title"><%= post.title %></h2>
+                    <p class="article-excerpt"><%= post.summary %></p>
+                    <div class="article-meta">
+                        <span class="article-category"><%= post.category %></span>
+                        <a href="/article/<%= post.slug %>" class="read-more">Continue Reading →</a>
+                    </div>
+                </div>
+            </article>
+        <% }) %>
+
+        
+
+    </section>
+    <% if (posts.length === 0) { %><p class="no-articles">We have nothing to show. No posts found.</p><% } %>
+
+    <div class="pagination">
+        <% if (currentPage > 1){ %>
+            <a href="?page=<%= currentPage - 1 %>&category=<%= currentCategory %>" class="next-page">← Prev</a>
+        <% } %>
+        
+        <% for (let i = 1; i <= totalPages; i++) { %>
+            <a href="?page=<%= i %>&category=<%= currentCategory %>" class="page-number <%= i === currentPage ? 'current' : '' %>"><%= i %></a>
+        <% } %>
+        <% if (currentPage < totalPages){ %>
+            <a href="?page=<%= currentPage + 1 %>&category=<%= currentCategory %>" class="next-page">Next →</a>
+        <% } %>
+    </div>
+    </main>
+
+    <script>
+        const categoryFilter = document.getElementById('category-filter');
+
+        //initial filtervalue based on search params
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialCategory = urlParams.get('category') || 'all';
+        categoryFilter.value = initialCategory;
+
+        categoryFilter.addEventListener('change', () => {
+            const selectedCategory = categoryFilter.value;
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('category', selectedCategory);
+            urlParams.set('page', 1);
+            window.location.search = urlParams.toString();
+        });
+    </script>
+<%- include('../partials/toaster') %>
+<%- include('../partials/footer') %>

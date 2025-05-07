@@ -1,0 +1,242 @@
+/* Global Styles */
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0069d9;
+    --text-color: #333;
+    --light-gray: #f8f9fa;
+    --medium-gray: #e9ecef;
+    --border-color: #dee2e6;
+    --error-color: #dc3545;
+    --success-color: #28a745;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    color: var(--text-color);
+    line-height: 1.6;
+    background-color: #fff;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Logo Container */
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-top: 20px;
+}
+
+.logo-container h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.logo-container h1 a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.logo-container .tagline {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Verification Container */
+.verification-container {
+    max-width: 460px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    padding: 40px;
+    text-align: center;
+}
+
+.verification-header {
+    margin-bottom: 30px;
+}
+
+.verification-header h2 {
+    font-size: 1.75rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.verification-header p {
+    color: #666;
+    font-size: 1rem;
+    max-width: 340px;
+    margin: 0 auto;
+}
+
+/* OTP Input Styles */
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 30px 0;
+}
+
+.otp-input {
+    width: 60px;
+    height: 70px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1.75rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.otp-input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+/* Error message */
+.error-message {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin: 8px 0 16px;
+    min-height: 20px;
+}
+
+/* Timer */
+.timer-container {
+    margin-bottom: 24px;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+#timer {
+    font-weight: 600;
+}
+
+/* Button Styles */
+.verify-button {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 20px;
+}
+
+.verify-button:hover {
+    background-color: var(--primary-hover);
+}
+
+.verify-button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* Resend Code Section */
+.resend-container {
+    margin-bottom: 24px;
+    font-size: 0.875rem;
+}
+
+.resend-button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 0.875rem;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.resend-button:disabled {
+    color: #999;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
+/* Help Text */
+.help-text {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.help-text a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.help-text a:hover {
+    text-decoration: underline;
+}
+
+/* Success Animation */
+@keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.checkmark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: var(--success-color);
+    stroke-miterlimit: 10;
+    margin: 10% auto 20px;
+    box-shadow: inset 0px 0px 0px var(--success-color);
+}
+
+.checkmark__circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    fill: none;
+    animation: checkmark 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark__check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: checkmark 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.3s forwards;
+}
+
+/* Responsive Styles */
+@media (max-width: 520px) {
+    .verification-container {
+        padding: 30px 20px;
+    }
+    
+    .otp-container {
+        gap: 8px;
+    }
+    
+    .otp-input {
+        width: 50px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+}

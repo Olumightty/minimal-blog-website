@@ -1,0 +1,97 @@
+<!-- drafts.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Drafts | Writing Platform</title>
+  <link rel="stylesheet" href="/stylesheets/drafts.css">
+    <link rel="stylesheet" href="/stylesheets/profile-sidebar.css">
+    <!-- <link rel="stylesheet" href="/stylesheets/navbar.css">
+    <link rel="stylesheet" href="/stylesheets/common.css"> -->
+</head>
+<body>
+  <!-- Your navbar partial will be included here -->
+  <%- include('../partials/navbar') %>
+
+  <div class="main-container">
+    <!-- Your sidebar partial will be included here -->
+    <%- include('../partials/profile-sidebar') %>
+
+    <div class="content-area">
+      <header class="page-header">
+        <h1>My Drafts</h1>
+        <div class="header-actions">
+          <div class="search-container">
+            <input type="text" id="searchDrafts" placeholder="Search drafts...">
+            <i class="search-icon">🔍</i>
+          </div>
+          <div class="filter-sort">
+            <select id="sortDrafts">
+              <option value="recent">Most Recent</option>
+              <option value="oldest">Oldest First</option>
+              <option value="title">Title A-Z</option>
+            </select>
+          </div>
+          <button class="new-draft-btn">+ New Draft</button>
+        </div>
+      </header>
+
+      <div class="drafts-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="totalDrafts">0</span>
+          <span class="stat-label">Total Drafts</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="recentDrafts">0</span>
+          <span class="stat-label">Created This Week</span>
+        </div>
+      </div>
+
+      <div class="drafts-container" id="draftsContainer">
+        <!-- Drafts will be populated here via JavaScript -->
+        <div class="loading-indicator">
+          <div class="spinner"></div>
+          <p>Loading your drafts...</p>
+        </div>
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-icon">📝</div>
+        <h3>No drafts found</h3>
+        <p>Start writing your first draft or try a different search.</p>
+        <button class="create-first-draft-btn">Create Your First Draft</button>
+      </div>
+
+      <div class="pagination" id="pagination">
+        <!-- Pagination will be added via JavaScript if needed -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Draft preview modal -->
+  <div class="modal" id="draftPreviewModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Draft Title</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="draft-meta">
+          <span class="draft-date" id="modalDate">Last edited: May 6, 2025</span>
+          <span class="draft-word-count" id="modalWordCount">0 words</span>
+        </div>
+        <div class="draft-preview-content" id="modalContent">
+          <!-- Draft content will be loaded here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="secondary-btn" id="closeModalBtn">Close</button>
+        <button class="primary-btn" id="editDraftBtn">Edit Draft</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/javascripts/drafts.js"></script>
+</body>
+</html>

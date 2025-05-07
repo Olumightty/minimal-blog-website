@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile | Minimal Blog</title>
+  <link rel="stylesheet" href="/stylesheets/profile.css">
+  <link rel="stylesheet" href="/stylesheets/profile-sidebar.css">
+  
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+  <div class="profile-layout">
+    <!-- Sidebar -->
+    <%- include('../partials/profile-sidebar') %>
+
+    <!-- Main Content Area -->
+    <main class="content">
+      <header class="content-header">
+        <h1>Profile Information</h1>
+        <button id="saveProfileBtn" class="primary-btn">Save Changes</button>
+      </header>
+      <form id="form">
+      <div class="profile-sections">
+        <!-- Profile Photo Section -->
+        <section class="profile-section photo-section">
+          <h2>Profile Photo</h2>
+          <div class="profile-photo-container">
+            <img src="<%= profile.avatar %>" id="profilePhoto" alt="Profile Photo" class="profile-photo">
+            <div class="photo-actions">
+              <button type="button" id="uploadPhotoBtn" class="secondary-btn">Upload New Photo</button>
+              <input name="avatar" class="hidden" type="file" id="profilePhotoInput" accept="image/*">
+              <!-- <button id="removePhotoBtn" class="text-btn">Remove</button> -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Basic Demographics Section -->
+        <section class="profile-section">
+          <h2>Basic Information</h2>
+          <div class="profile-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="displayName">Display Name</label>
+                <input name="displayName" disabled type="text" id="displayName" value=<%= profile.user_id.name %>>
+              </div>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input name="username" type="text" id="username" value="<%= profile.username %>">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input name="email" disabled type="email" id="email" value="<%= profile.user_id.email %>">
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number (optional)</label>
+                <input name="phone" type="tel" id="phone" value="<%= profile.demographics.phone %>">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input name="location" type="text" id="location" value="<%= profile.demographics.location %>">
+              </div>
+              <div class="form-group">
+                <label for="website">Website (optional)</label>
+                <input name="website" type="url" id="website" value="<%= profile.demographics.website %>">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="birthday">Birthday (optional)</label>
+                <input name="birthday" type="date" id="birthday" value="<%= profile.demographics.birthday %>">
+              </div>
+              <div class="form-group">
+                <label for="gender">Gender (optional)</label>
+                <select name="gender" id="gender">
+                  <option value="prefer not to say">Prefer not to say</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <!-- <option value="nonbinary">Non-binary</option>
+                  <option value="other">Other</option> -->
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section class="profile-section">
+          <h2>About Me</h2>
+          <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea name="bio" id="bio" rows="4" placeholder="Write a short bio about yourself..."></textarea>
+            <div class="helper-text">Brief description that appears on your profile. Maximum 160 characters.</div>
+          </div>
+          <div class="form-group">
+            <label for="extended-bio">Extended Bio</label>
+            <textarea name="extended-bio" id="extended-bio" rows="8" placeholder="Share more about yourself, your interests, and your work..."></textarea>
+          </div>
+        </section>
+
+        <!-- Social Media Links -->
+        <section class="profile-section">
+          <h2>Social Media</h2>
+          <div class="profile-form">
+            <div class="form-row">
+              <% profile.socialLinks.forEach((social) => { %>
+                <div class="form-group">
+                  <label for="social-name">Social Platform</label>
+                  <input value="<%= social.platform %>" type="text" id="social-name" placeholder="Platform name">
+                </div>
+                <div class="form-group">
+                  <label for="social-url">URL</label>
+                  <input value="<%= social.url %>" type="url" id="social-url" placeholder="https://">
+                </div>
+              <% }) %>
+            </div>
+            <button type="button" class="text-btn add-more-btn">+ Add more social links</button>
+          </div>
+        </section>
+
+        <!-- Preferences Section -->
+        <!-- <section class="profile-section">
+          <h2>Preferences</h2>
+          <div class="preference-toggles">
+            <div class="preference-item">
+              <div>
+                <h3>Email Notifications</h3>
+                <p>Receive email updates about comments and mentions</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="email-notifications">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="preference-item">
+              <div>
+                <h3>Profile Visibility</h3>
+                <p>Make your profile visible to other users</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="profile-visibility">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="preference-item">
+              <div>
+                <h3>Show Email</h3>
+                <p>Display your email address on your public profile</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="show-email">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </section> -->
+
+        <!-- Account Recovery -->
+        <section class="profile-section">
+          <h2>Account Recovery</h2>
+          <div class="form-group">
+            <label for="recovery-email">Recovery Email</label>
+            <input name="recovery-email" type="email" id="recovery-email" value="<%= profile.accountRecovery.recoveryEmail %>">
+          </div>
+          <!-- <div class="form-group">
+            <label for="security-question">Security Question</label>
+            <select id="security-question">
+              <option selected>What was the name of your first pet?</option>
+              <option>In what city were you born?</option>
+              <option>What is your mother's maiden name?</option>
+              <option>What high school did you attend?</option>
+              <option>What was your childhood nickname?</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="security-answer">Security Answer</label>
+            <input type="password" id="security-answer" value="********">
+          </div> -->
+        </section>
+        </form>
+        <!-- Danger Zone -->
+        <section class="profile-section danger-section">
+          <h2>Danger Zone</h2>
+          <div class="danger-actions">
+            <div class="danger-item">
+              <div>
+                <h3>Change Password</h3>
+                <p>Update your account password</p>
+              </div>
+              <button class="warning-btn">Change</button>
+            </div>
+            <div class="danger-item">
+              <div>
+                <h3>Deactivate Account</h3>
+                <p>Temporarily disable your account</p>
+              </div>
+              <button class="warning-btn">Deactivate</button>
+            </div>
+            <div class="danger-item">
+              <div>
+                <h3>Delete Account</h3>
+                <p>Permanently remove your account and all data</p>
+              </div>
+              <button class="danger-btn">Delete</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <%- include('../partials/toaster') %>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/javascripts/profile.js"></script>
+  <script>
+    const gender = document.getElementById('gender');
+    gender.value = "<%= profile.demographics.gender %>";
+
+    const bio = document.getElementById('bio');
+    bio.value = "<%= profile.bio.short %>";
+
+    const extendedBio = document.getElementById('extended-bio');
+    extendedBio.value = "<%= profile.bio.extended %>";
+
+    const birthday = document.getElementById('birthday');
+    birthday.value = "<%= new Date(profile.demographics.birthday).toISOString().split('T')[0] %>";
+    // const emailNotifications = document.getElementById('email-notifications');
+    // emailNotifications.checked = "<%= profile.preferences.emailNotifications %>";
+
+    // const profileVisibility = document.getElementById('profile-visibility');
+    // profileVisibility.checked = "<%= profile.preferences.profileVisibility %>";
+
+    // const showEmail = document.getElementById('show-email');
+    // showEmail.checked = "<%= profile.preferences.showEmail %>";
+
+
+    const profileForm = document.getElementById('profileForm');
+    const formInputs = profileForm.querySelectorAll('input, select, textarea');
+
+    
+  </script>
+</body>
+</html>
