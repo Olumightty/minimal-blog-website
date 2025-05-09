@@ -29,7 +29,7 @@ class ArticleController {
                 // throw new Error('Error uploading image to Cloudinary');
                 res.status(201).json({message: "successfully created the article", slug: newPost.slug});
             } catch (error) {
-                throw new Error('Failed to create article', error);
+                throw new Error(`Failed to create article ${error}`);
             }
             
         }

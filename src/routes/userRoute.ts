@@ -15,7 +15,7 @@ userRouter.get('/profile', async(req, res) => {
         if(!profile) throw new Error('User profile not found');
         res.render('user/profile', {profile})
     } catch (error) {
-        throw new Error('Could not fetch the user', error);
+        throw new Error(`Could not fetch the user ${error}`);
     }
 })
 
@@ -48,6 +48,6 @@ userRouter.get('/drafts', async(req, res) => {
         })
         res.render('user/drafts', {drafts: JSON.stringify(drafts) || []})
     } catch (error) {
-        throw new Error('Could not fetch the user', error);
+        throw new Error(`Could not fetch the user ${error}`);
     }
 })
