@@ -14,7 +14,7 @@ export const uploadImage = async (filePath: Express.Multer.File) => {
         const uploadResult = await cloudinary.v2.uploader.upload(filePath.destination + '/' + filePath.filename)
         return uploadResult.secure_url;
     } catch (error) {
-        throw new Error('Error uploading image to Cloudinary', error);
+        throw new Error(`Error uploading image to Cloudinary ${error}`);
     }
     
 };
