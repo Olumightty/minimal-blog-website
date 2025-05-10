@@ -3,24 +3,15 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./DB/mongoclient";
-import { migratePosts } from "./DB/migrate";
-import { Post, PostSchema } from "./DB/schemas";
+import { Post } from "./DB/schemas";
 import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
-import { slugify, stripHtml } from "./lib/helpers";
-import { InferSchemaType } from "mongoose";
-import multer from 'multer';
-import path from "path";
-import { uploadImage } from "./lib/cloudinary";
-import fs from 'fs';
-import { newArticleSchema } from "./lib/zod";
 import { getOTPTime, sendVerificationEmail } from "./lib/mailing";
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
 import { isSignedIn } from "./routes/middlewares";
 import { Auth } from "./controllers/AuthControllers";
 import { userRouter } from "./routes/userRoute";
-import { Article } from "./controllers/ArticleController";
 import { articleRouter } from "./routes/articleRoute";
 
 
@@ -71,7 +62,12 @@ app.get("/signup", (req, res) => {
 })
 
 app.get("/logout", (req, res) => {
-    req.session.destroy(function(err) {res.redirect("/signin");});
+    req.session.destroy(function(err) {
+        if(err) {
+            return res.status(500).send("Could not log out");
+        }
+        res.redirect("/signin");
+    });
     
 })
 

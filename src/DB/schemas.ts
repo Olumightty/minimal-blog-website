@@ -1,4 +1,3 @@
-import { profile } from "console";
 import { model, Schema } from "mongoose";
 
 export const PostSchema = new Schema({

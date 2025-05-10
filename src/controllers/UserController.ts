@@ -4,7 +4,7 @@ import { Profile, ProfileSchema, User } from "../DB/schemas";
 import fs from "fs";
 import { updateProfileSchema } from "../lib/zod";
 import { uploadImage } from "../lib/cloudinary";
-import { InferSchemaType, Types } from "mongoose";
+import { InferSchemaType  } from "mongoose";
 
 
 class UserController {
@@ -23,13 +23,13 @@ class UserController {
                 location: validate.data.location,
                 website: validate.data.website,
                 birthday: new Date(validate.data.birthdate),
-                gender: validate.data.gender as any,
+                gender: validate.data.gender as undefined,
             },
             bio: {
                 short: validate.data.bio,
                 extended: validate.data.extendedBio,
             },
-            socialLinks: [] as any,  //initialize socialLinks as an empty array to escape the type error,
+            socialLinks: [] as undefined,  //initialize socialLinks as an empty array to escape the type error,
             accountRecovery: {
                 recoveryEmail: validate.data.recovery_email,
             }     
@@ -38,7 +38,7 @@ class UserController {
         try {
             const avatar = req.file ? await uploadImage(req.file!) : '';
             // console.log(avatar)
-            req.file && fs.unlinkSync(req.file!.destination + '/' + req.file!.filename); //delete the file from the server
+            if (req.file) fs.unlinkSync(req.file!.destination + '/' + req.file!.filename); //delete the file from the server
             const id = await getUserId(req.session.user!.email);
             if(!id) throw new Error('User not found, error has ocurred');
             const updateUser = await User.findByIdAndUpdate(id, { avatar }, {new: true});
@@ -48,7 +48,7 @@ class UserController {
             req.session.user!.avatar = avatar; //update the session user avatar
             return res.status(200).json({message: "successfully updated the profile"});
         } catch (error) {
-            return res.status(500).json({error: 'Failed to update profile'});
+            return res.status(500).json({error: `Failed to update profile ${error}`});
         }
     }
 }

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Post, PostSchema, Profile, User } from "../DB/schemas";
+import { Post, PostSchema, Profile } from "../DB/schemas";
 import { DOMPurify } from "../server";
 import { getUserId, slugify, stripHtml } from "../lib/helpers";
 import { InferSchemaType } from "mongoose";
@@ -18,7 +18,7 @@ class ArticleController {
                 const post: InferSchemaType<typeof PostSchema>  = req.body;
                 const imageUrl = req.file ? await uploadImage(req.file!) : '';
                 // console.log(imageUrl)
-                req.file && fs.unlinkSync(req.file!.destination + '/' + req.file!.filename); //delete the file from the server
+                if (req.file) fs.unlinkSync(req.file!.destination + '/' + req.file!.filename); //delete the file from the server
                 const id = await getUserId(req.session.user!.email);
                 if(!id) throw new Error('User not found, error has ocurred');
                 const profile = await Profile.findOne({user_id: id}) //link the authors profile id to the post

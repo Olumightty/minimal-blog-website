@@ -40,4 +40,4 @@ export const updateProfileSchema = z.object({
     })),
     recovery_email: z.string().email().min(1, { message: "Invalid Email" }).transform((email) => DOMPurify.sanitize(email)),
     phone: z.string().min(1, { message: "Invalid Phone Number" }).transform((phone) => DOMPurify.sanitize(phone)),
-});z
+});

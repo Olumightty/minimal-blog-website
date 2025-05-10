@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { Post, User } from '../DB/schemas';
+import { User } from '../DB/schemas';
 
 
 export const sendVerificationEmail = async(email: string) => {
@@ -12,7 +12,7 @@ export const sendVerificationEmail = async(email: string) => {
         console.log(otp)//send otp to email
         return true
     } catch (error) {   
-        return false
+        return error ? false : false
     }
 }
 
@@ -24,6 +24,6 @@ export const getOTPTime = async(email: string) => {
         if(!validOtp) throw new Error('This OTP is not valid anymore');
         return (validOtp.exp! - Math.floor(Date.now() / 1000));
     } catch (error) {
-        return false
+        return error ? false : false
     }
 }

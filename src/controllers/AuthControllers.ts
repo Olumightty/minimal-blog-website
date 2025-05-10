@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import { Post, Profile, User } from "../DB/schemas";
+import {  Profile, User } from "../DB/schemas";
 import { loginSchema, newUserSchema } from "../lib/zod";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { getOTPTime, sendVerificationEmail } from "../lib/mailing";
+import { sendVerificationEmail } from "../lib/mailing";
 
 
 
@@ -22,7 +22,7 @@ class AuthController {
                 req.session.user = {name: user.name, email: user.email, role: user.role, verified: user.verified, avatar: user.avatar!};
                 res.status(201).json({message: "successfully signed in", authenticated: true});
             } catch (error) {
-                res.status(400).json({message: "Failed to sign in", authenticated: false});
+                res.status(400).json({message: `Failed to sign in ${error}`, authenticated: false});
             }
         }
     }
@@ -42,11 +42,11 @@ class AuthController {
                 const randomDigits = Math.floor(Math.random() * 1000)
                 const newProfile = new Profile({user_id: newUser._id, username: validateUserInput.data.firstName+randomDigits, avatar: newUser.avatar!});
                 // console.log(newProfile)
-                const resp = await newProfile.save();
+                await newProfile.save();
                 // console.log(resp)
                 req.session.user = {name: newUser.name, email: newUser.email, role: newUser.role, verified: newUser.verified, avatar: newUser.avatar!};
                 const response = sendVerificationEmail(req.session.user!.email)
-                if(!response) null //use a logger 
+                if(!response) console.log('Could not send email'); //logger
                 res.status(201).json({message: "account successfully created", created: true});
             } catch (error) {
                 // console.log(error)
@@ -56,7 +56,7 @@ class AuthController {
     }
 
     ValidateEmail = async(req: Request, res: Response) => {
-        const otp = req.body.otp.trim() as String;
+        const otp = req.body.otp.trim() as string;
         try {
             const user = await User.findOne({email: req.session.user!.email});
             if(!user) throw new Error('User not found');

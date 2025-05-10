@@ -25,7 +25,7 @@ export const getUserId = async(email: string) => {
     if(!user) throw new Error('User not found');
     return user.id
   } catch (error) {
-    return false
+    return error ? false : false
   }
     
      
