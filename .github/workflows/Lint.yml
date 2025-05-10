@@ -26,3 +26,10 @@ jobs:
 
       - name: 'Super Linter'
         uses: super-linter/super-linter@v7.1.0
+        env:
+          # To report GitHub Actions status checks
+          VALIDATE_JAVASCRIPT_ES: false
+          VALIDATE_JAVASCRIPT_PRETTIER: false
+          VALIDATE_CSS: false
+          VALIDATE_CSS_PRETTIER: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
