@@ -39,3 +39,17 @@ jobs:
       - name: 'Mock Pass'
         run: echo "All tests passed"
 
+  lint:
+    name: 'Perform Linting of Code'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+
+      - name: 'Lint'
+        run: npm run lint
+
