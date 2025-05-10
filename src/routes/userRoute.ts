@@ -19,7 +19,7 @@ userRouter.get('/profile', async(req, res) => {
     }
 })
 
-userRouter.patch('/profile', upload.single('avatar'), UserAction.UpdateProfile as any)
+userRouter.patch('/profile', upload.single('avatar'), UserAction.UpdateProfile as undefined)
 
 
 userRouter.get('/drafts', async(req, res) => {
