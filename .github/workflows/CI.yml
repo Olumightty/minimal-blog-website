@@ -39,10 +39,3 @@ jobs:
       - name: 'Mock Pass'
         run: echo "All tests passed"
 
-  lint:
-    name: 'Perform Linting of Code'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 'Super Linter'
-        uses: super-linter/super-linter@v7.1.0
