@@ -46,10 +46,8 @@
 
     const navLinks = document.querySelectorAll('.sidebar-nav a');
     const currentPath = window.location.pathname
-    console.log(currentPath)
     
     navLinks.forEach(link => {
-      console.log(link.getAttribute('href'))
       if (`/${currentPath}`.includes(link.getAttribute('href'))) {
         link.classList.add('active');
       } else {

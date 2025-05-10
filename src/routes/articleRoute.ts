@@ -39,7 +39,7 @@ articleRouter.get("/", async(req, res) => {
         res.render("article/articles", {posts, currentPage, totalPages, currentCategory});
     } catch (error) {
         res.render("404")
-        throw new Error("Could not fetch posts", error)
+        throw new Error(`Could not fetch the articles ${error}`);
     }
     
 })
@@ -63,7 +63,8 @@ articleRouter.get("/:slug", async(req, res) => {
             res.render("article/articlePage", {post});
         }
     } catch (error) {
-        throw new Error('Could not fetch the article', error);
+        res.render("404")
+        throw new Error(`Could not fetch the article ${error}`);
     }
     
     

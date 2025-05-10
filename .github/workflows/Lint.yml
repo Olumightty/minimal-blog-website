@@ -1,0 +1,28 @@
+name: Perform Linting
+
+on: 
+  workflow_dispatch:
+  push:
+    branches: ['main']
+    paths:
+      - ./src/**
+  pull_request:
+    branches: ['main']
+    paths:
+      - ./src/**
+
+jobs:
+
+  lint:
+    name: 'Perform Linting of Code'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+
+      - name: 'Super Linter'
+        uses: super-linter/super-linter@v7.1.0

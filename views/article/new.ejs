@@ -266,7 +266,7 @@
                     });
                     const { slug } = response.data;
                     if (slug) {
-                        window.location.href = `/article/${slug}`;
+                        window.location.href = `/user/drafts`;
                     }
                     else{
                         throw new Error('Error creating article');

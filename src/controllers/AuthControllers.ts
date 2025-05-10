@@ -50,7 +50,7 @@ class AuthController {
                 res.status(201).json({message: "account successfully created", created: true});
             } catch (error) {
                 // console.log(error)
-                throw new Error('Failed to create user', error);
+                throw new Error(`Failed to create user ${error}`);
             }
         }
     }
@@ -68,7 +68,7 @@ class AuthController {
             req.session.user = {name: user.name, email: user.email, role: user.role, verified: true, avatar: user.avatar!};
             res.status(201).json({message: "Email successfully verified", verified: true});
         } catch (error) {
-            throw new Error('Failed to verify email', error);
+            throw new Error(`Failed to verify email ${error}`);
         }
     }
 }

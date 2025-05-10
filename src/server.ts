@@ -116,7 +116,7 @@ app.get("/", async(req, res) => {
         }
     } catch (error) {
         res.render("404")
-        throw new Error('Could not fetch the posts', error);
+        throw new Error(`Could not fetch the article ${error}`);
     }
     
 })

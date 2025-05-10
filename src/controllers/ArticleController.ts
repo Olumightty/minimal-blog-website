@@ -24,12 +24,12 @@ class ArticleController {
                 const profile = await Profile.findOne({user_id: id}) //link the authors profile id to the post
                 if(!profile) throw new Error('User profile not found, error has ocurred');
                 // console.log(id)
-                const newPost = new Post({...post, slug: slugify(post.title!), body: DOMPurify.sanitize(post.body!), imageUrl, author_id: profile._id});
+                const newPost = new Post({...post, slug: slugify(post.title!), body: DOMPurify.sanitize(post.body!), imageUrl, author_id: profile.id});
                 await newPost.save();
                 // throw new Error('Error uploading image to Cloudinary');
                 res.status(201).json({message: "successfully created the article", slug: newPost.slug});
             } catch (error) {
-                throw new Error('Failed to create article', error);
+                throw new Error(`Failed to create article ${error}`);
             }
             
         }
