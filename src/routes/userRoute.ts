@@ -53,3 +53,23 @@ userRouter.get('/drafts', async (req, res) => {
     throw new Error(`Could not fetch the user ${error}`);
   }
 });
+
+userRouter.get('/drafts/edit/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const post = await Post.findOne({ status: 'draft', _id: id });
+    if (!post) throw new Error('Post not found');
+    const profile = await Profile.findById(post.author_id).populate('user_id');
+    if (!profile) throw new Error('User profile not found');
+    const user_id = await getUserId(req.session.user!.email);
+    if (!user_id) throw new Error('User not found');
+    if (profile.user_id.id != user_id) {
+      throw new Error('Unauthorized to view draft');
+    }
+    res.render('user/draftEdit', { post });
+  } catch (error) {
+    res.render('404');
+    throw new Error(`Could not fetch the user ${error}`);
+  }
+});

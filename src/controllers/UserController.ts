@@ -40,12 +40,15 @@ class UserController {
     };
     console.log(validate.data.social_links);
     try {
-      const avatar = req.file ? await uploadImage(req.file!) : '';
+      let avatar = req.file ? await uploadImage(req.file!) : '';
       // console.log(avatar)
       if (req.file)
         fs.unlinkSync(req.file!.destination + '/' + req.file!.filename); //delete the file from the server
       const id = await getUserId(req.session.user!.email);
       if (!id) throw new Error('User not found, error has ocurred');
+      if (!avatar.trim()) {
+        avatar = req.session.user!.avatar; //if no new image is uploaded, use the old one
+      }
       const updateUser = await User.findByIdAndUpdate(
         id,
         { avatar },
