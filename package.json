@@ -21,6 +21,8 @@
     "dompurify": "^3.2.5",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "jsdom": "^26.1.0",
@@ -28,6 +30,7 @@
     "mongoose": "^8.13.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.2",
+    "prettier": "^3.5.3",
     "zod": "^3.24.3"
   },
   "devDependencies": {
