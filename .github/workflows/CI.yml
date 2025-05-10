@@ -39,23 +39,3 @@ jobs:
       - name: 'Mock Pass'
         run: echo "All tests passed"
 
-<<<<<<< HEAD
-=======
-  lint:
-    name: 'Perform Linting of Code'
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: read
-
-    steps:
-      - name: 'Checkout code'
-        uses: actions/checkout@v4.2.2
-        with:
-          fetch-depth: 0
-      - name: 'Super Linter'
-        uses: super-linter/super-linter@v7.1.0
-        env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
->>>>>>> 196601af5f8590737ffe2465048b9a5692be82c4
