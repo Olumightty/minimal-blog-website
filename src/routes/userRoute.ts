@@ -59,6 +59,7 @@ userRouter.get('/drafts/edit/:id', async (req, res) => {
 
   try {
     const post = await Post.findOne({ status: 'draft', _id: id });
+    // console.log(post);
     if (!post) throw new Error('Post not found');
     const profile = await Profile.findById(post.author_id).populate('user_id');
     if (!profile) throw new Error('User profile not found');
@@ -73,3 +74,9 @@ userRouter.get('/drafts/edit/:id', async (req, res) => {
     throw new Error(`Could not fetch the user ${error}`);
   }
 });
+
+userRouter.patch(
+  '/drafts/edit/:id',
+  upload.single('image'),
+  UserAction.UpdateArticle as undefined
+);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Blog</title>
+    <title> <%= post.title %> | Minimal Blog</title>
     <link rel="stylesheet" href="/stylesheets/articlePage.css">
     <link rel="stylesheet" href="/stylesheets/common.css">
     <link rel="stylesheet" href="/stylesheets/responsive.css">
@@ -18,7 +18,7 @@
             <article class="main-article">
                 <div class="article-meta">
                     <span class="article-category"><%= post.category %></span>
-                    <span class="article-date"><%= post.created_at.toDateString() %></span>
+                    <span class="article-date"><%= post.updatedAt.toDateString() %></span>
                 </div>
                 
                 <h1 class="article-title"><%= post.title %></h1>

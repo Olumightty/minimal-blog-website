@@ -107,3 +107,29 @@ export const updateProfileSchema = z.object({
     .min(1, { message: 'Invalid Phone Number' })
     .transform((phone) => DOMPurify.sanitize(phone)),
 });
+
+export const updateArticleSchema = z.object({
+  title: z
+    .string()
+    .min(1, { message: 'Title must be at least 1 character long' })
+    .transform((title) => DOMPurify.sanitize(title)),
+  body: z
+    .string()
+    .min(1, { message: 'Content must be at least 1 character long' })
+    .transform((body) => DOMPurify.sanitize(body)),
+  summary: z
+    .string()
+    .min(1, { message: 'Summary must be at least 1 character long' })
+    .transform((summary) => DOMPurify.sanitize(summary)),
+  category: z.string().min(1),
+  tags: z
+    .string()
+    .min(1, { message: 'Tags must be at least 1 character long' })
+    .transform((tags) => DOMPurify.sanitize(tags)),
+  status: z
+    .enum(['published', 'draft'])
+    .refine((type) => type === 'published' || type === 'draft', {
+      message: "Type must be either 'published' or 'draft'",
+    }),
+  imageUrl: z.string().transform((imageUrl) => DOMPurify.sanitize(imageUrl)),
+});
