@@ -102,9 +102,12 @@
 
         document.addEventListener('DOMContentLoaded', function() {
 
+            const url = new URL(window.location.href);
+            const id = url.pathname.split('/')[url.pathname.split('/').length - 1];
+
             //specified in separate qill editor file
             quill.clipboard.dangerouslyPasteHTML(
-                '<%- post.body %>' || '<p></p>'
+                '<%- post.body.replace(/'/g, "\\'") %>' || '<p></p>'
             );
             
             const tagsInput = document.getElementById('article-tags');
@@ -124,7 +127,7 @@
             }
             let tagsArray = '<%=post.tags %>';
             tagsArray = tagsArray.split(',')
-            console.log(tagsArray);
+            // console.log(tagsArray);
 
             tagsArray.forEach(tag => {
                 if (tag.trim() !== '') {
@@ -223,7 +226,8 @@
                     body: DOMPurify.sanitize(formData.get('content')), //prevent xss atack
                     tags: formData.get('tags'),
                     image: formData.get('image'),
-                    status: 'published'
+                    status: 'published',
+                    imageUrl: imagePreview.getAttribute('src'),
                 };
 
                 if (post.body.replace(/<[^>]*>/g, '').trim() === '') {
@@ -240,7 +244,7 @@
                     return;
                 }
                 try {
-                    const response = await axios.post('/article/new', post, {
+                    const response = await axios.patch(`/user/drafts/edit/${id}`, post, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -282,7 +286,8 @@
                     body: DOMPurify.sanitize(formData.get('content')), //prevent xss atack
                     tags: formData.get('tags'),
                     image: formData.get('image'),
-                    status: 'draft'
+                    status: 'draft',
+                    imageUrl: imagePreview.getAttribute('src'),
                 };
 
                 if (post.body.replace(/<[^>]*>/g, '').trim() === '') {
@@ -299,7 +304,7 @@
                     return;
                 }
                 try {
-                    const response = await axios.post('/article/new', post, {
+                    const response = await axios.patch(`/user/drafts/edit/${id}`, post, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }

@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
-import { getUserId } from '../lib/helpers';
-import { Profile, ProfileSchema, User } from '../DB/schemas';
+import { getUserId, stripHtml } from '../lib/helpers';
+import { Post, PostSchema, Profile, ProfileSchema, User } from '../DB/schemas';
 import fs from 'fs';
-import { updateProfileSchema } from '../lib/zod';
+import { updateArticleSchema, updateProfileSchema } from '../lib/zod';
 import { uploadImage } from '../lib/cloudinary';
 import { InferSchemaType } from 'mongoose';
+import { DOMPurify } from '../server';
 
 class UserController {
   UpdateProfile = async (req: Request, res: Response) => {
@@ -70,6 +71,48 @@ class UserController {
       return res
         .status(500)
         .json({ error: `Failed to update profile ${error}` });
+    }
+  };
+
+  UpdateArticle = async (req: Request, res: Response) => {
+    const article_id = req.params.id;
+    if (stripHtml(req.body.body).trim() == '') throw new Error('Body is empty'); //remove all html tags
+    const validate = updateArticleSchema.safeParse(req.body); //zod validation
+    if (!validate.success) throw new Error(validate.error.message);
+    else {
+      try {
+        const post: InferSchemaType<typeof PostSchema> = req.body;
+        const imageUrl = req.file
+          ? await uploadImage(req.file!)
+          : validate.data.imageUrl;
+        // console.log(imageUrl)
+        if (req.file)
+          fs.unlinkSync(req.file!.destination + '/' + req.file!.filename); //delete the file from the server
+        const id = await getUserId(req.session.user!.email);
+        if (!id) throw new Error('User not found, error has ocurred');
+        const profile = await Profile.findOne({ user_id: id }); //link the authors profile id to the post
+        if (!profile)
+          throw new Error('User profile not found, error has ocurred');
+        // console.log(id)
+        const updatePost = await Post.findOneAndUpdate(
+          { author_id: profile.id, _id: article_id },
+          {
+            ...post,
+            body: DOMPurify.sanitize(post.body!),
+            imageUrl,
+            updatedAt: new Date(),
+          }
+        );
+        if (!updatePost) throw new Error('Post not found');
+        // throw new Error('Error uploading image to Cloudinary');
+        res.status(201).json({
+          message: 'successfully updated the article',
+          slug: updatePost.slug,
+          status: updatePost.status,
+        });
+      } catch (error) {
+        throw new Error(`Failed to create article ${error}`);
+      }
     }
   };
 }
