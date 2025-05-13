@@ -50,7 +50,7 @@ userRouter.get('/drafts', async (req, res) => {
     });
     res.render('user/drafts', { drafts: JSON.stringify(drafts) || [] });
   } catch (error) {
-    throw new Error(`Could not fetch the user ${error}`);
+    throw new Error(`Could not fetch the drafts ${error}`);
   }
 });
 
@@ -80,3 +80,38 @@ userRouter.patch(
   upload.single('image'),
   UserAction.UpdateArticle as undefined
 );
+
+// userRouter.get('/drafts/delete/:id', UserAction.DeleteArticle as undefined);
+
+userRouter.get('/articles', async (req, res) => {
+  try {
+    const id = await getUserId(req.session.user!.email);
+    if (!id) throw new Error('User not found');
+    const profile = await Profile.findOne({ user_id: id });
+    if (!profile) throw new Error('User profile not found');
+    const data = await Post.find({
+      author_id: profile.id,
+      status: 'published',
+    });
+    const articles = data.map((article) => {
+      return {
+        id: article.id,
+        title: article.title,
+        slug: article.slug,
+        created_at: article.created_at,
+        updatedAt: article.updatedAt,
+        summary: article.summary,
+        body: article.body,
+        category: article.category,
+        tags: article.tags,
+        author_id: article.author_id,
+        likes: article.likes,
+        status: article.status,
+        imageUrl: article.imageUrl,
+      };
+    });
+    res.render('user/myArticles', { articles: JSON.stringify(articles) || [] });
+  } catch (error) {
+    throw new Error(`Could not fetch the articles ${error}`);
+  }
+});

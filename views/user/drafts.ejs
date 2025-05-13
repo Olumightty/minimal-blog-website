@@ -342,8 +342,8 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         filteredDrafts = drafts.filter(draft => {
           return draft.title.toLowerCase().includes(searchTerm) || 
-                 draft.excerpt.toLowerCase().includes(searchTerm) ||
-                 draft.content.toLowerCase().includes(searchTerm);
+                 draft.summary.toLowerCase().includes(searchTerm) ||
+                 draft.body.toLowerCase().includes(searchTerm);
         });
       }
       

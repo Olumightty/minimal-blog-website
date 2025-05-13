@@ -1,0 +1,388 @@
+<!-- myArticles.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Articles | Writing Platform</title>
+  <link rel="stylesheet" href="/stylesheets/myArticles.css">
+  <link rel="stylesheet" href="/stylesheets/profile-sidebar.css">
+  <!-- <link rel="stylesheet" href="/stylesheets/navbar.css">
+  <link rel="stylesheet" href="/stylesheets/common.css"> -->
+</head>
+<body>
+  <!-- Your navbar partial will be included here -->
+  <%- include('../partials/navbar') %>
+
+  <div class="main-container">
+    <!-- Your sidebar partial will be included here -->
+    <%- include('../partials/profile-sidebar') %>
+
+    <div class="content-area">
+      <header class="page-header">
+        <h1>My Articles</h1>
+        <div class="header-actions">
+          <div class="search-container">
+            <input type="text" id="searchArticles" placeholder="Search articles...">
+            <i class="search-icon">🔍</i>
+          </div>
+          <div class="filter-sort">
+            <select id="sortArticles">
+              <option value="recent">Most Recent</option>
+              <option value="views">Most Viewed</option>
+              <option value="oldest">Oldest First</option>
+              <option value="title">Title A-Z</option>
+            </select>
+          </div>
+          <button class="new-article-btn">+ New Article</button>
+        </div>
+      </header>
+
+      <div class="articles-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="totalArticles">0</span>
+          <span class="stat-label">Total Articles</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="publishedArticles">0</span>
+          <span class="stat-label">Published</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="totalViews">0</span>
+          <span class="stat-label">Total Views</span>
+        </div>
+      </div>
+
+      <div class="articles-container" id="articlesContainer">
+        <!-- Articles will be populated here via JavaScript -->
+        <div class="loading-indicator">
+          <div class="spinner"></div>
+          <p>Loading your articles...</p>
+        </div>
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-icon">📄</div>
+        <h3>No articles found</h3>
+        <p>Start writing your first article or try a different search.</p>
+        <button class="create-first-article-btn">Create Your First Article</button>
+      </div>
+
+      <div class="pagination" id="pagination">
+        <!-- Pagination will be added via JavaScript if needed -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Article preview modal -->
+  <div class="modal" id="articlePreviewModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Article Title</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="article-meta">
+          <span class="article-date" id="modalDate">Published: May 6, 2025</span>
+          <span class="article-stats">
+            <span class="article-views" id="modalViews">0 views</span>
+            <span class="article-comments" id="modalComments">0 comments</span>
+          </span>
+        </div>
+        <div class="article-preview-content" id="modalContent">
+          <!-- Article content will be loaded here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="secondary-btn" id="closeModalBtn">Close</button>
+        <button class="primary-btn" id="editArticleBtn">Edit Article</button>
+        <button class="primary-btn" id="viewArticleBtn">View Published</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM Elements
+      const articlesContainer = document.getElementById('articlesContainer');
+      const emptyState = document.getElementById('emptyState');
+      const searchInput = document.getElementById('searchArticles');
+      const sortSelect = document.getElementById('sortArticles');
+      const totalArticlesElement = document.getElementById('totalArticles');
+      const publishedArticlesElement = document.getElementById('publishedArticles');
+      const totalViewsElement = document.getElementById('totalViews');
+      const modal = document.getElementById('articlePreviewModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalDate = document.getElementById('modalDate');
+      const modalViews = document.getElementById('modalViews');
+      const modalComments = document.getElementById('modalComments');
+      const modalContent = document.getElementById('modalContent');
+      const closeModalBtn = document.querySelector('.close-modal');
+      const editArticleBtn = document.getElementById('editArticleBtn');
+      const viewArticleBtn = document.getElementById('viewArticleBtn');
+      const newArticleBtn = document.querySelector('.new-article-btn');
+      const createFirstArticleBtn = document.querySelector('.create-first-article-btn');
+    
+      // State
+      let articles = <%- articles %>;
+      let filteredArticles = [];
+      let currentPage = 1;
+      const articlesPerPage = 8;
+      
+      // Fetch articles from server
+      fetchArticles();
+    
+      // Event Listeners
+      searchInput.addEventListener('input', handleSearch);
+      sortSelect.addEventListener('change', handleSort);
+      closeModalBtn.addEventListener('click', closeModal);
+      document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+      editArticleBtn.addEventListener('click', handleEditArticle);
+      viewArticleBtn.addEventListener('click', handleViewArticle);
+      newArticleBtn.addEventListener('click', createNewArticle);
+      createFirstArticleBtn.addEventListener('click', createNewArticle);
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+    
+      // Functions
+      function fetchArticles() {
+        // Update stats
+        updateArticleStats();
+          
+        // Display articles
+        filteredArticles = [...articles];
+        renderArticles();
+      }
+    
+      function renderArticles() {
+        // Clear loading indicator
+        articlesContainer.innerHTML = '';
+        
+        // Check if we have articles to display
+        if (filteredArticles.length === 0) {
+          emptyState.style.display = 'block';
+          return;
+        }
+        
+        emptyState.style.display = 'none';
+        
+        // Calculate pagination
+        const startIndex = (currentPage - 1) * articlesPerPage;
+        const endIndex = startIndex + articlesPerPage;
+        const paginatedArticles = filteredArticles.slice(startIndex, endIndex);
+        
+        // Create article cards
+        paginatedArticles.forEach(article => {
+          const articleCard = createArticleCard(article);
+          articlesContainer.appendChild(articleCard);
+        });
+        
+        // Render pagination if needed
+        renderPagination();
+      }
+      
+      function createArticleCard(article) {
+        const card = document.createElement('div');
+        card.className = 'article-card';
+        card.dataset.id = article.id;
+        
+        // Status badge
+        const statusBadge = article.status === 'published' 
+          ? '<span class="status-badge published">Published</span>' 
+          : '<span class="status-badge draft">Draft</span>';
+        
+        // Format date
+        const publishDate = new Date(article.publishedAt || article.updatedAt || article.createdAt);
+        const formattedDate = publishDate.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric' 
+        });
+        
+        card.innerHTML = `
+          <div class="article-card-header">
+            <h3 class="article-title">${article.title}</h3>
+            ${statusBadge}
+          </div>
+          <div class="article-card-body">
+            <p class="article-excerpt">${article.excerpt || article.summary}</p>
+          </div>
+          <div class="article-card-footer">
+            <span class="article-date">${formattedDate}</span>
+            <div class="article-stats">
+              <span class="article-views">${article.views || 0} views</span>
+              <span class="article-comments">${article.comments || 0} comments</span>
+            </div>
+          </div>
+        `;
+        
+        // Add click event to open preview modal
+        card.addEventListener('click', () => {
+          openArticlePreview(article);
+        });
+        
+        return card;
+      }
+      
+      function renderPagination() {
+        const paginationElement = document.getElementById('pagination');
+        paginationElement.innerHTML = '';
+        
+        const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+        
+        if (totalPages <= 1) {
+          return; // Don't show pagination if only one page
+        }
+        
+        // Previous button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'pagination-btn prev';
+        prevBtn.innerHTML = '&laquo;';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderArticles();
+          }
+        });
+        paginationElement.appendChild(prevBtn);
+        
+        // Page buttons
+        for (let i = 1; i <= totalPages; i++) {
+          const pageBtn = document.createElement('button');
+          pageBtn.className = `pagination-btn ${currentPage === i ? 'active' : ''}`;
+          pageBtn.textContent = i;
+          pageBtn.addEventListener('click', () => {
+            currentPage = i;
+            renderArticles();
+          });
+          paginationElement.appendChild(pageBtn);
+        }
+        
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'pagination-btn next';
+        nextBtn.innerHTML = '&raquo;';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderArticles();
+          }
+        });
+        paginationElement.appendChild(nextBtn);
+      }
+      
+      function updateArticleStats() {
+        // Update total articles count
+        totalArticlesElement.textContent = articles.length;
+        
+        // Calculate published articles
+        const publishedCount = articles.filter(article => article.status === 'published').length;
+        publishedArticlesElement.textContent = publishedCount;
+        
+        // Calculate total views
+        const totalViews = articles.reduce((sum, article) => sum + (article.views || 0), 0);
+        totalViewsElement.textContent = totalViews;
+      }
+      
+      function handleSearch() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        if (searchTerm === '') {
+          filteredArticles = [...articles];
+        } else {
+          filteredArticles = articles.filter(article => {
+            return article.title.toLowerCase().includes(searchTerm) || 
+                   (article.summary && article.summary.toLowerCase().includes(searchTerm)) ||
+                   (article.body && article.body.toLowerCase().includes(searchTerm));
+          });
+        }
+        
+        currentPage = 1; // Reset to first page
+        renderArticles();
+      }
+      
+      function handleSort() {
+        const sortValue = sortSelect.value;
+        
+        switch (sortValue) {
+          case 'recent':
+            filteredArticles.sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+            break;
+          case 'oldest':
+            filteredArticles.sort((a, b) => new Date(a.updatedAt || a.createdAt) - new Date(b.updatedAt || b.createdAt));
+            break;
+          case 'title':
+            filteredArticles.sort((a, b) => a.title.localeCompare(b.title));
+            break;
+          case 'views':
+            filteredArticles.sort((a, b) => (b.views || 0) - (a.views || 0));
+            break;
+        }
+        
+        renderArticles();
+      }
+      
+      function openArticlePreview(article) {
+        // Set modal content
+        modalTitle.textContent = article.title;
+        
+        const publishDate = new Date(article.publishedAt || article.updatedAt || article.createdAt);
+        const dateLabel = article.status === 'published' ? 'Published: ' : 'Last edited: ';
+        modalDate.textContent = `${dateLabel}${publishDate.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+
+        })}`;
+        
+        modalViews.textContent = `${article.views || 0} views`;
+        modalComments.textContent = `${article.comments || 0} comments`;
+        modalContent.innerHTML = article.body || article.summary || '';
+        
+        // Store article ID for actions
+        editArticleBtn.dataset.id = article.id;
+        viewArticleBtn.dataset.id = article.slug;
+        
+        // Show/hide view published button
+        viewArticleBtn.style.display = article.status === 'published' ? 'block' : 'none';
+        
+        // Show modal
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+      }
+      
+      function closeModal() {
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scrolling
+      }
+      
+      function handleEditArticle() {
+        const articleId = editArticleBtn.dataset.id;
+        // Redirect to edit page
+        window.location.href = `/user/articles/edit/${articleId}`;
+      }
+      
+      function handleViewArticle() {
+        const articleId = viewArticleBtn.dataset.id;
+        // Redirect to published article page
+        window.location.href = `/article/${articleId}`;
+      }
+      
+      function createNewArticle() {
+        // Redirect to new article page
+        window.location.href = '/article/new';
+      }
+    });
+  </script>
+</body>
+</html>
