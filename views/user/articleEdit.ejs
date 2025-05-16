@@ -11,10 +11,10 @@
 <body>
     
 
-        <a href="/user/drafts"><button type="button" class="btn btn-outline btn-back"><i class="fas fa-arrow-left"></i></button></a>
+        <a href=<%= post.status === 'draft' ? '/user/drafts' : '/user/articles' %>><button type="button" class="btn btn-outline btn-back"><i class="fas fa-arrow-left"></i></button></a>
    
         <section class="new-article-section">
-            <h1>Edit Draft</h1>
+            <h1>Edit Article</h1>
             
             <form id="new-article-form" class="new-article-form" action="/new-article" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
@@ -208,6 +208,7 @@
             // Form submission
             const form = document.getElementById('new-article-form');
             const publishButton = document.getElementById('btn-publish');
+            
             publishButton.addEventListener('click', async function(e) {
                 e.preventDefault();
                 publishButton.disabled = true;
@@ -244,7 +245,7 @@
                     return;
                 }
                 try {
-                    const response = await axios.patch(`/user/drafts/edit/${id}`, post, {
+                    const response = await axios.patch(`/user/articles/edit/${id}`, post, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -268,6 +269,10 @@
 
 
             const draftButton = document.getElementById('btn-draft');
+            if(<%= post.status === 'published' %>){
+                draftButton.style.display = 'none';
+                publishButton.innerHTML = 'Publish Changes';
+            }
             draftButton.addEventListener('click', async function(e) {
                 e.preventDefault();
                 draftButton.disabled = true;
@@ -304,7 +309,7 @@
                     return;
                 }
                 try {
-                    const response = await axios.patch(`/user/drafts/edit/${id}`, post, {
+                    const response = await axios.patch(`/user/articles/edit/${id}`, post, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }

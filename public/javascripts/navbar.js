@@ -3,7 +3,11 @@ document.addEventListener('DOMContentLoaded', async function () {
   const avatarBtn = document.getElementById('avatarBtn');
   const profileDropdown = document.getElementById('profileDropdown');
   const avatarImage = document.querySelector('.avatar-img');
+  const signInBtn = document.querySelector('.sign-in-btn');
 
+  signInBtn.addEventListener('click', () => {
+    window.location.href = '/signin';
+  });
   // Toggle dropdown menu when avatar is clicked
   avatarBtn.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -45,7 +49,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
     const data = await response.json();
     console.log(data.avatar);
-    if (data.avatar) avatarImage.setAttribute('src', data.avatar);
+    if (data.avatar) {
+      avatarImage.setAttribute('src', data.avatar);
+      document.querySelector('.username').textContent = `Hello, ${data.name}`;
+    } else {
+      avatarBtn.style.display = 'none';
+      signInBtn.style.display = 'block';
+    }
   } catch (error) {
     showError('Failed to load avatar');
   }

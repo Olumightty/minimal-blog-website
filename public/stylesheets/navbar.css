@@ -63,6 +63,10 @@
     display: flex;
     align-items: center;
   }
+
+  .username{
+    margin-right: 5px;
+  }
   
   .nav-link {
     color: #495057;
@@ -95,8 +99,24 @@
   
   .new-article-btn:hover {
     background-color: #0055aa;
+
   }
   
+  .sign-in-btn{
+    border: 2px solid gray;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    margin-right: 1rem;
+    color: gray;
+    transition: background-color 0.3s;
+    display: none;
+  }
+
+  .sign-in-btn:hover{
+    background-color: gray;
+    color: white;
+  }
   /* Avatar and Dropdown */
   .avatar-dropdown {
     position: relative;

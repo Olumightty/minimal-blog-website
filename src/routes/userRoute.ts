@@ -54,11 +54,11 @@ userRouter.get('/drafts', async (req, res) => {
   }
 });
 
-userRouter.get('/drafts/edit/:id', async (req, res) => {
+userRouter.get('/articles/edit/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
-    const post = await Post.findOne({ status: 'draft', _id: id });
+    const post = await Post.findOne({ _id: id });
     // console.log(post);
     if (!post) throw new Error('Post not found');
     const profile = await Profile.findById(post.author_id).populate('user_id');
@@ -66,17 +66,17 @@ userRouter.get('/drafts/edit/:id', async (req, res) => {
     const user_id = await getUserId(req.session.user!.email);
     if (!user_id) throw new Error('User not found');
     if (profile.user_id.id != user_id) {
-      throw new Error('Unauthorized to view draft');
+      throw new Error('Unauthorized to view this article');
     }
-    res.render('user/draftEdit', { post });
+    res.render('user/articleEdit', { post });
   } catch (error) {
     res.render('404');
-    throw new Error(`Could not fetch the user ${error}`);
+    throw new Error(`Could not fetch the article ${error}`);
   }
 });
 
 userRouter.patch(
-  '/drafts/edit/:id',
+  '/articles/edit/:id',
   upload.single('image'),
   UserAction.UpdateArticle as undefined
 );
