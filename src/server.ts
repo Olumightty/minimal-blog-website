@@ -116,9 +116,13 @@ app.get('/', async (req, res) => {
 
 app.get('/user/avatar', (req, res) => {
   // res.json({avatar: req.session.user!.avatar})
-  const avatar = req.session.user!.avatar;
-  const name = req.session.user!.name;
-  res.json({ avatar, name });
+  if (!req.session.user) {
+    res.json({ avatar: '', name: '' });
+  } else {
+    const avatar = req.session.user!.avatar;
+    const name = req.session.user!.name;
+    res.json({ avatar, name });
+  }
 });
 
 // app.get("/migrate", (req, res) => {
@@ -130,5 +134,5 @@ app.use('/article', articleRouter);
 app.use('/user', isSignedIn, userRouter);
 app.listen(process.env.PORT, () => {
   connectDB();
-  console.log('server is running');
+  console.log('server is running on port', process.env.PORT);
 });
