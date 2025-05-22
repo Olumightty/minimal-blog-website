@@ -134,5 +134,5 @@ app.use('/article', articleRouter);
 app.use('/user', isSignedIn, userRouter);
 app.listen(process.env.PORT, () => {
   connectDB();
-  console.log('server is running');
+  console.log('server is running on port', process.env.PORT);
 });

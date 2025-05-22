@@ -226,7 +226,12 @@
     extendedBio.value = "<%= profile.bio.extended %>";
 
     const birthday = document.getElementById('birthday');
-    birthday.value = "<%= new Date(profile.demographics.birthday).toISOString().split('T')[0] %>";
+    const birthdayValue = "<%= profile.demographics.birthday %>".trim();
+    if (birthdayValue) {
+      const formattedDate = new Date(birthdayValue).toISOString().split('T')[0];
+      birthday.value = formattedDate;
+    }
+    
     // const emailNotifications = document.getElementById('email-notifications');
     // emailNotifications.checked = "<%= profile.preferences.emailNotifications %>";
 

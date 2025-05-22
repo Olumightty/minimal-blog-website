@@ -115,3 +115,8 @@ userRouter.get('/articles', async (req, res) => {
     throw new Error(`Could not fetch the articles ${error}`);
   }
 });
+
+userRouter.delete(
+  '/articles/delete/:id',
+  UserAction.DeleteArticle as undefined
+);

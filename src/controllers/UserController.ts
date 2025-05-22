@@ -115,6 +115,25 @@ class UserController {
       }
     }
   };
+
+  DeleteArticle = async (req: Request, res: Response) => {
+    const article_id = req.params.id;
+    try {
+      const id = await getUserId(req.session.user!.email);
+      if (!id) throw new Error('User not found, error has ocurred');
+      const profile = await Profile.findOne({ user_id: id }); //link the authors profile id to the post
+      if (!profile)
+        throw new Error('User profile not found, error has ocurred');
+      const post = await Post.findOneAndDelete({
+        _id: article_id,
+        author_id: profile.id,
+      });
+      if (!post) throw new Error('Post not found');
+      res.status(200).json({ message: 'successfully deleted the article' });
+    } catch (error) {
+      throw new Error(`Failed to delete article ${error}`);
+    }
+  };
 }
 
 export const UserAction = new UserController();

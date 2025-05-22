@@ -82,7 +82,9 @@
                 
                 <div class="form-actions">
                     <button type="button" class="btn btn-outline btn-cancel">Cancel</button>
+                    
                     <div>
+                        <button type="button" style="background-color: red; color: white;" class="btn btn-outline" id="btn-delete">Delete</button>
                         <button type="button" class="btn btn-outline" id="btn-draft">Save Draft</button>
                         <button type="submit" class="btn btn-primary" id="btn-publish">Publish Article</button>
                     </div>
@@ -332,6 +334,41 @@
 
             
         });
+
+
+        const deleteBtn = document.getElementById('btn-delete');
+        const article_id = "<%= post.id %>"
+        const status = "<%= post.status %>"
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', async function () {
+            if (
+              confirm(
+                'Are you sure you want to delete your account? This action cannot be undone.'
+              )
+            ) {
+              try {
+                const request = await axios.delete(`/user/articles/delete/${article_id}`);
+                const response = request.data;
+                if (response.message) {
+                  alert('Article deletion Successful');
+                  if(status === 'draft'){
+                    window.location.href = '/user/drafts';
+                    return;
+                  }
+                  window.location.href = '/user/articles';
+                  return;    
+                }
+                throw new Error('Failed to delete article');
+              } catch (error) {
+                if (error) {
+                  showError(error);
+                }
+                showError("Failed to delete article");
+              }
+              
+            }
+          });
+        }
     </script>
 
     

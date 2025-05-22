@@ -100,7 +100,7 @@
       </div>
     </div>
   </div>
-
+  <%- include('../partials/toaster') %>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -359,6 +359,8 @@
         // Show modal
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+
+        
       }
       
       function closeModal() {
@@ -383,6 +385,11 @@
         window.location.href = '/article/new';
       }
     });
+
+      
+
+   
+   
   </script>
 </body>
 </html>
