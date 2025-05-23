@@ -1,11 +1,153 @@
 
+<link rel="stylesheet" href="/stylesheets/footer.css">
 
-        <footer>
-            <p>&copy; 2025 Minimal Blog. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+<footer class="footer">
+    <!-- Main Footer Content -->
+    <div class="footer-main">
+        <div class="footer-container">
+            <!-- Brand Section -->
+            <div class="footer-brand">
+                <div class="brand-logo">
+                    <i class="fas fa-pen-fancy brand-icon"></i>
+                    <span class="brand-text">BlogSpace</span>
+                </div>
+                <p class="brand-description">
+                    Discover amazing stories, insights, and perspectives from writers around the world. 
+                    Join our community of passionate storytellers and readers.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="RSS Feed">
+                        <i class="fas fa-rss"></i>
+                    </a>
+                </div>
             </div>
-        </footer>
-    </body>
-</html>
+
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h3 class="footer-title">Explore</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/article">All Articles</a></li>
+                    <li><a href="/categories">Categories</a></li>
+                    <li><a href="/authors">Authors</a></li>
+                    <li><a href="/trending">Trending</a></li>
+                    <li><a href="/featured">Featured Posts</a></li>
+                </ul>
+            </div>
+
+            <!-- Resources -->
+            <div class="footer-section">
+                <h3 class="footer-title">Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/help">Help Center</a></li>
+                    <li><a href="/guidelines">Writing Guidelines</a></li>
+                    <li><a href="/api">API Documentation</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal & Support -->
+            <div class="footer-section">
+                <h3 class="footer-title">Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                    <li><a href="/cookies">Cookie Policy</a></li>
+                    <li><a href="/dmca">DMCA</a></li>
+                    <li><a href="/accessibility">Accessibility</a></li>
+                    <li><a href="/sitemap">Sitemap</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter Subscription -->
+            <div class="footer-section newsletter-section">
+                <h3 class="footer-title">Stay Updated</h3>
+                <p class="newsletter-description">
+                    Subscribe to our newsletter for the latest articles and updates.
+                </p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <div class="input-group">
+                        <input 
+                            type="email" 
+                            class="newsletter-input" 
+                            placeholder="Enter your email"
+                            required
+                            id="emailInput"
+                        >
+                        <button type="submit" class="newsletter-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="newsletter-status" id="newsletterStatus"></div>
+                </form>
+                <div class="newsletter-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="12000">0</span>
+                        <span class="stat-label">Subscribers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="250">0</span>
+                        <span class="stat-label">Articles</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+        <div class="footer-container">
+            <div class="footer-bottom-content">
+                <div class="copyright">
+                    <p>&copy; 2025 BlogSpace. All rights reserved.</p>
+                    <p class="footer-note">Made with <i class="fas fa-heart heart-icon"></i> by passionate developers</p>
+                </div>
+                <div class="footer-meta">
+                    <div class="language-selector">
+                        <button class="language-btn" id="languageBtn">
+                            <i class="fas fa-globe"></i>
+                            <span>English</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="language-dropdown" id="languageDropdown">
+                            <a href="#" data-lang="en">English</a>
+                            <a href="#" data-lang="es">Español</a>
+                            <a href="#" data-lang="fr">Français</a>
+                            <a href="#" data-lang="de">Deutsch</a>
+                        </div>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+                            <i class="fas fa-moon dark-icon"></i>
+                            <i class="fas fa-sun light-icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</footer>
+
+<script src="/javascripts/footer.js"></script>
