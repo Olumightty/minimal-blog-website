@@ -1,32 +1,98 @@
 <link rel="stylesheet" href="/stylesheets/navbar.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <nav class="navbar">
-    <div class="container">
-      <div class="nav-left">
-        <a href="/" class="nav-link active">HOME</a>
-        <a href="/article" class="nav-link">ARTICLES</a>
-        <a href="/about" class="nav-link">ABOUT</a>
-        <a href="/contact" class="nav-link">CONTACT</a>
+<nav class="navbar">
+  <div class="nav-container">
+      <!-- Logo/Brand -->
+      <div class="nav-brand">
+          <a href="/" class="brand-link">
+              <i class="fas fa-pen-fancy brand-icon"></i>
+              <span class="brand-text">BlogSpace</span>
+          </a>
       </div>
-      <div class="nav-right">
-        <a href="/article/new"><button class="new-article-btn">+ NEW ARTICLE</button></a>
-        <span class="username"></span>
-        <div class="avatar-dropdown">
-          <button class="sign-in-btn">
-            Sign In
-          </button>
-          <button class="avatar-btn" id="avatarBtn">
-            <img src="" alt="User Avatar" class="avatar-img">
-          </button>
-          <div class="dropdown-menu" id="profileDropdown">
-            <a href="/user/profile">My Profile</a>
-            <a href="/user/settings">Settings</a>
-            <a href="/logout">Logout</a>
+
+      <!-- Mobile Menu Toggle -->
+      <div class="mobile-menu-toggle" id="mobileMenuToggle">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="nav-menu" id="navMenu">
+          <div class="nav-links">
+              <a href="/" class="nav-link active" data-page="home">
+                  <i class="fas fa-home nav-icon"></i>
+                  <span>Home</span>
+              </a>
+              <a href="/article" class="nav-link" data-page="articles">
+                  <i class="fas fa-newspaper nav-icon"></i>
+                  <span>Articles</span>
+              </a>
+              <a href="/about" class="nav-link" data-page="about">
+                  <i class="fas fa-user nav-icon"></i>
+                  <span>About</span>
+              </a>
+              <a href="/contact" class="nav-link" data-page="contact">
+                  <i class="fas fa-envelope nav-icon"></i>
+                  <span>Contact</span>
+              </a>
           </div>
-        </div>
+
+          <!-- User Actions -->
+          <div class="nav-actions">
+              <!-- New Article Button -->
+              <a href="/article/new" class="new-article-btn">
+                  <i class="fas fa-plus"></i>
+                  <span>New Article</span>
+              </a>
+
+              <!-- User Profile Section -->
+              <div class="user-section">
+                  <!-- Welcome Message (hidden by default) -->
+                  <span class="username-welcome"></span>
+                  
+                  <!-- Sign In Button (shown when not logged in) -->
+                  <button class="sign-in-btn">
+                      <i class="fas fa-sign-in-alt"></i>
+                      <span>Sign In</span>
+                  </button>
+
+                  <!-- Avatar Dropdown (shown when logged in) -->
+                  <div class="avatar-dropdown">
+                      <button class="avatar-btn" id="avatarBtn">
+                          <img src="" alt="User Avatar" class="avatar-img">
+                          <i class="fas fa-chevron-down dropdown-arrow"></i>
+                      </button>
+                      <div class="dropdown-menu" id="profileDropdown">
+                          <div class="dropdown-header">
+                              <img src="" alt="Avatar" class="dropdown-avatar">
+                              <div class="dropdown-user-info">
+                                  <span class="dropdown-username"></span>
+                                  <span class="dropdown-role">Author</span>
+                              </div>
+                          </div>
+                          <div class="dropdown-divider"></div>
+                          <a href="/user/profile" class="dropdown-item">
+                              <i class="fas fa-user"></i>
+                              <span>My Profile</span>
+                          </a>
+                          <a href="/user/settings" class="dropdown-item">
+                              <i class="fas fa-cog"></i>
+                              <span>Settings</span>
+                          </a>
+                          <div class="dropdown-divider"></div>
+                          <a href="/logout" class="dropdown-item logout">
+                              <i class="fas fa-sign-out-alt"></i>
+                              <span>Logout</span>
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-    </div>
-  </nav>
+  </div>
+</nav>
 
   <script src="/javascripts/navbar.js"></script>
 
