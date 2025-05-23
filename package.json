@@ -4,7 +4,6 @@
   "description": "simple blog site using express and ejs",
   "license": "ISC",
   "author": "Olumide Ayoola",
-  "type": "module",
   "main": "src/server.ts",
   "scripts": {
     "build": "tsc",
