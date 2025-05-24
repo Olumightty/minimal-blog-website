@@ -75,7 +75,7 @@ function navigateToCategory(category) {
 
   // Navigate with slight delay for smooth transition
   setTimeout(() => {
-    window.location.search = urlParams.toString();
+    window.location.href = `${window.location.origin}${window.location.pathname}?${urlParams.toString()}` + '#posts';
   }, 300);
 }
 
