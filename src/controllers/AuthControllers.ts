@@ -166,14 +166,12 @@ class AuthController {
   };
 
   ResetPassword = async (req: Request, res: Response) => {
-    const { oldPassword, newPassword, confirmPassword, resetToken } = req.body;
+    const { newPassword, confirmPassword, resetToken } = req.body;
     try {
       const verifyToken = jwt.verify(resetToken as string, process.env.JWT_SECRET as string) as JwtPayload;
       if (!verifyToken) throw new Error('Invalid token');
       const user = await User.findOne({ email: verifyToken.email });
       if (!user) throw new Error('Invalid token');
-      const comparePassword = await bcrypt.compare(oldPassword, user.password);
-      if (!comparePassword) throw new Error('Invalid password');
       if (newPassword !== confirmPassword) throw new Error('Passwords do not match');
       const hashPassword = await bcrypt.hash(newPassword, Number(process.env.SALT_ROUNDS));
       if (!hashPassword) throw new Error('Could not hash password');
