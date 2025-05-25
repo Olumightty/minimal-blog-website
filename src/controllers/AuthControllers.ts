@@ -84,8 +84,7 @@ class AuthController {
           verified: newUser.verified,
           avatar: newUser.avatar!,
         };
-        const response = sendVerificationEmail(req.session.user!.email);
-        if (!response) console.log('Could not send email'); //logger
+        
         res
           .status(201)
           .json({ message: 'account successfully created', created: true });
@@ -126,6 +125,17 @@ class AuthController {
     } catch (error) {
       throw new Error(`Failed to verify email ${error}`);
     }
+  };
+
+  VerifyEmail = async (req: Request, res: Response) => {
+    try {
+      const response = sendVerificationEmail(req.session.user!.email);
+      if (!response) throw new Error('Could not send email');
+      res.status(201).json({ message: 'Email successfully sent', status: true });
+    } catch (error) {
+      throw new Error(`Failed to send email ${error}`);
+    }
+    
   };
 }
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Email Verification</h3>
+    <p>Click Button to verify your email.</p>
+    <button class="verify-button">Verify Email</button>
+</body>
+
+<%- include('partials/toaster') %>
+<script>
+    const verifyButton = document.querySelector('.verify-button');
+    verifyButton.addEventListener('click', async function () {
+        verifyButton.disabled = true;
+        verifyButton.textContent = 'Verifying...';
+        try {
+            const request = await fetch('/verify-email', {
+                method: 'POST',
+            })
+            const data = await request.json();
+            if (data.status){
+                showSuccess(data.message);
+                setTimeout(() => {
+                    window.location.href = '/validate-email';
+                }, 1000)
+            }
+        } catch (error) {
+            showError('Failed to verify email');
+        }finally{
+            verifyButton.disabled = false;
+            verifyButton.textContent = 'Verify Email';
+        }
+        
+    });
+</script>
+</html>

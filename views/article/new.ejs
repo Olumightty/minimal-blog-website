@@ -6,283 +6,228 @@
     <link rel="stylesheet" href="/stylesheets/new-article.css">
     <link rel="stylesheet" href="/stylesheets/common.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>New Article | Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Create New Article | Blog</title>
 </head>
 <body>
-    
+    <!-- Background Elements -->
+    <div class="bg-decoration">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
 
-        <a href="/"><button type="button" class="btn btn-outline btn-back"><i class="fas fa-arrow-left"></i></button></a>
-   
-        <section class="new-article-section">
-            <h1>Create New Article</h1>
-            
-            <form id="new-article-form" class="new-article-form" action="/new-article" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="article-title">Title</label>
-                    <input type="text" id="article-title" name="title" placeholder="Enter article title" required>
+    <!-- Header -->
+    <header class="create-header">
+        <div class="header-content">
+            <a href="/" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Blog</span>
+            </a>
+            <div class="header-title">
+                <h1>Create New Article</h1>
+                <p>Share your thoughts with the world</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="article-form-wrapper">
+                <!-- Progress Indicator -->
+                <div class="progress-indicator">
+                    <div class="step active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <span>Basic Info</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <div class="step-circle">2</div>
+                        <span>Content</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="3">
+                        <div class="step-circle">3</div>
+                        <span>Details</span>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="article-category">Category</label>
-                    <select id="article-category" name="category" required>
-                        <option value="" disabled selected>Select a category</option>
-                        <option value="design">Design</option>
-                        <option value="technology">Technology</option>
-                        <option value="productivity">Productivity</option>
-                        <option value="creativity">Creativity</option>
-                        <option value="lifestyle">Lifestyle</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <img id="image-preview" class="hidden" src="" alt="">
-                    <label for="article-featured-image">Featured Image</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="article-featured-image" name="image" accept="image/*">
-                        <div class="file-input-placeholder">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Drop an image here or click to upload</span>
+
+                <form id="new-article-form" class="article-form" action="/new-article" method="POST" enctype="multipart/form-data">
+                    <!-- Step 1: Basic Information -->
+                    <div class="form-section active" data-section="1">
+                        <div class="section-header">
+                            <h2><i class="fas fa-info-circle"></i> Basic Information</h2>
+                            <p>Let's start with the essentials</p>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="article-title">
+                                    <i class="fas fa-heading"></i>
+                                    Article Title
+                                </label>
+                                <input type="text" id="article-title" name="title" placeholder="Enter an engaging title for your article" required>
+                                <div class="input-helper">Make it catchy and descriptive</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="article-category">
+                                    <i class="fas fa-folder"></i>
+                                    Category
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="article-category" name="category" required>
+                                        <option value="" disabled selected>Choose a category</option>
+                                        <option value="design">🎨 Design</option>
+                                        <option value="technology">💻 Technology</option>
+                                        <option value="productivity">⚡ Productivity</option>
+                                        <option value="creativity">🎭 Creativity</option>
+                                        <option value="lifestyle">🌟 Lifestyle</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down select-arrow"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="article-summary">
+                                    <i class="fas fa-align-left"></i>
+                                    Article Summary
+                                </label>
+                                <textarea id="article-summary" name="summary" rows="4" placeholder="Write a compelling summary that will make readers want to read more..." required></textarea>
+                                <div class="char-counter">
+                                    <span class="current">0</span>/<span class="max">200</span> characters
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="article-summary">Summary</label>
-                    <textarea id="article-summary" name="summary" rows="3" placeholder="Brief summary of your article" required></textarea>
-                </div>
-                
-                <!-- <div class="form-group">
-                    <label for="article-content">Content</label>
-                    <div class="editor-toolbar">
-                        <button type="button" class="toolbar-btn" title="Bold"><i class="fas fa-bold"></i></button>
-                        <button type="button" class="toolbar-btn" title="Italic"><i class="fas fa-italic"></i></button>
-                        <button type="button" class="toolbar-btn" title="Heading"><i class="fas fa-heading"></i></button>
-                        <button type="button" class="toolbar-btn" title="Link"><i class="fas fa-link"></i></button>
-                        <button type="button" class="toolbar-btn" title="Quote"><i class="fas fa-quote-right"></i></button>
-                        <button type="button" class="toolbar-btn" title="Code"><i class="fas fa-code"></i></button>
-                        <button type="button" class="toolbar-btn" title="List"><i class="fas fa-list-ul"></i></button>
-                        <button type="button" class="toolbar-btn" title="Image"><i class="fas fa-image"></i></button>
-                    </div>
-                    <textarea id="article-content" name="content" rows="12" placeholder="Write your article here..." required></textarea>
-                </div> -->
 
-                <div class="form-group">
-                    <%- include('../partials/editor') %>
-                </div> 
+                    <!-- Step 2: Featured Image -->
+                    <div class="form-section" data-section="2">
+                        <div class="section-header">
+                            <h2><i class="fas fa-image"></i> Featured Image</h2>
+                            <p>Add a stunning visual to your article</p>
+                        </div>
 
-                <div class="form-group tags-input-group">
-                    <label for="article-tags">Tags</label>
-                    <div class="tags-input-container">
-                        <input type="text" id="article-tags" placeholder="Add a tag and press Enter">
-                        <!-- <input id="tags" type='hidden' name='tags'> -->
-                        <div class="tags-container"></div>
+                        <div class="form-group image-upload-group">
+                            <div class="image-upload-area" id="image-upload-area">
+                                <input type="file" id="article-featured-image" name="image" accept="image/*" hidden>
+                                <div class="upload-placeholder" id="upload-placeholder">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <h3>Drop your image here</h3>
+                                    <p>or <span class="upload-link">browse files</span></p>
+                                    <div class="upload-formats">Supports: JPG, PNG, GIF (max 5MB)</div>
+                                </div>
+                                <div class="image-preview-container hidden" id="image-preview-container">
+                                    <img id="image-preview" src="" alt="Preview">
+                                    <div class="image-overlay">
+                                        <button type="button" class="change-image-btn">
+                                            <i class="fas fa-edit"></i>
+                                            Change Image
+                                        </button>
+                                        <button type="button" class="remove-image-btn">
+                                            <i class="fas fa-trash"></i>
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <small>Press Enter after each tag</small>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline btn-cancel">Cancel</button>
-                    <div>
-                        <button type="button" class="btn btn-outline" id="btn-draft">Save Draft</button>
-                        <button type="submit" class="btn btn-primary" id="btn-publish">Publish Article</button>
-                    </div>
-                    
-                </div>
-            </form>
-        </section>
 
-        <%- include('../partials/toaster') %>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.5/purify.min.js" integrity="sha512-/CUtA84sWWqWEBejNrrtWa7Yc4cth3Ome2ymvCKOo9YcZ4sh98tndUy4LutE2xGcAgD4fyz16y+gSyJdGCB5ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <!-- Step 3: Content & Tags -->
+                    <div class="form-section" data-section="3">
+                        <div class="section-header">
+                            <h2><i class="fas fa-pen-fancy"></i> Content & Tags</h2>
+                            <p>Create your masterpiece</p>
+                        </div>
+
+                        <div class="form-group content-group">
+                            <label for="article-content">
+                                <i class="fas fa-edit"></i>
+                                Article Content
+                            </label>
+                            <div class="editor-container">
+                                <%- include('../partials/editor') %>
+                            </div>
+                        </div>
+
+                        <div class="form-group tags-group">
+                            <label for="article-tags">
+                                <i class="fas fa-tags"></i>
+                                Tags
+                            </label>
+                            <div class="tags-input-wrapper">
+                                <div class="tags-display" id="tags-display"></div>
+                                <input type="text" id="article-tags" placeholder="Add tags to help readers find your article...">
+                            </div>
+                            <div class="tags-suggestions">
+                                <span class="suggestion-tag" data-tag="beginner">beginner</span>
+                                <span class="suggestion-tag" data-tag="tutorial">tutorial</span>
+                                <span class="suggestion-tag" data-tag="tips">tips</span>
+                                <span class="suggestion-tag" data-tag="guide">guide</span>
+                                <span class="suggestion-tag" data-tag="howto">howto</span>
+                            </div>
+                            <div class="input-helper">Press Enter to add tags, or click suggestions above</div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation & Actions -->
+                    <div class="form-navigation">
+                        <div class="nav-buttons">
+                            <button type="button" class="btn btn-secondary" id="prev-btn" style="display: none;">
+                                <i class="fas fa-arrow-left"></i>
+                                Previous
+                            </button>
+                            <button type="button" class="btn btn-primary" id="next-btn">
+                                Next
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="form-actions" id="form-actions" style="display: none;">
+                            <button type="button" class="btn btn-outline btn-cancel">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                            <div class="publish-buttons">
+                                <button type="button" class="btn btn-secondary" id="btn-draft">
+                                    <i class="fas fa-save"></i>
+                                    Save Draft
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-publish" id="btn-publish">
+                                    <i class="fas fa-rocket"></i>
+                                    Publish Article
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p id="loading-text">Publishing your article...</p>
+        </div>
+    </div>
+
+    <%- include('../partials/toaster') %>
     
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.5/purify.min.js" integrity="sha512-/CUtA84sWWqWEBejNrrtWa7Yc4cth3Ome2ymvCKOo9YcZ4sh98tndUy4LutE2xGcAgD4fyz16y+gSyJdGCB5ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/javascripts/new-article.js"></script>
 
-
-    <script aria-hidden="true">
-        // Simple tags input functionality
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const tagsInput = document.getElementById('article-tags');
-            // const saveTags = document.getElementById('tags');
-            const tagsContainer = document.querySelector('.tags-container');
-            const tagsArray = [];
-
-            tagsInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && tagsInput.value.trim() !== '') {
-                    e.preventDefault();
-                    const tag = tagsInput.value.trim();
-                    
-                    if (!tagsArray.includes(tag)) {
-                        tagsArray.push(tag);
-                        
-                        const tagElement = document.createElement('div');
-                        tagElement.classList.add('tag');
-                        tagElement.innerHTML = `
-                            <span class="tag-text">${tag}</span>
-                            <span class="tag-close">&times;</span>
-                        `;
-                        tagsContainer.appendChild(tagElement);
-                        
-                        tagElement.querySelector('.tag-close').addEventListener('click', function() {
-                            const index = tagsArray.indexOf(tag);
-                            if (index !== -1) {
-                                tagsArray.splice(index, 1);
-                            }
-                            tagsContainer.removeChild(tagElement);
-                        });
-                    }
-                    
-                    tagsInput.value = '';
-                    // saveTags.value = JSON.stringify(tagsArray);
-                }
-            });
-
-            // File input preview
-            const fileInput = document.getElementById('article-featured-image');
-            const fileInputPlaceholder = document.querySelector('.file-input-placeholder');
-            const imagePreview = document.getElementById('image-preview');
-            
-            fileInput.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    const file = this.files[0];
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imagePreview.setAttribute('src', e.target.result)
-                        imagePreview.setAttribute('alt', file.name);
-                        imagePreview.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                    fileInputPlaceholder.innerHTML = `<span>${file.name}</span>`;
-                    fileInputPlaceholder.classList.add('has-file');
-                } else {
-                    fileInputPlaceholder.innerHTML = `
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Drop an image here or click to upload</span>
-                    `;
-                    fileInputPlaceholder.classList.remove('has-file');
-                }
-            });
-
-            // Form submission
-            const form = document.getElementById('new-article-form');
-            const publishButton = document.getElementById('btn-publish');
-            publishButton.addEventListener('click', async function(e) {
-                e.preventDefault();
-                publishButton.disabled = true;
-                publishButton.innerHTML = 'Publishing...';
-                const formData = new FormData(form);
-                formData.set('tags', tagsArray);
-
-                
-                const body = formData.get('content').trim()
-                
-                
-                const post = {
-                    title: formData.get('title'),
-                    category: formData.get('category'),
-                    summary: formData.get('summary'),
-                    body: DOMPurify.sanitize(formData.get('content')), //prevent xss atack
-                    tags: formData.get('tags'),
-                    image: formData.get('image'),
-                    status: 'published'
-                };
-
-                if (post.body.replace(/<[^>]*>/g, '').trim() === '') {
-                    showError('Article body cannot be empty');
-                    publishButton.disabled = false;
-                    publishButton.innerHTML = 'Publish Article';
-                    return;
-                }
-
-                if(post.tags.trim() === ''){
-                    showError('At least one tag is required');
-                    publishButton.disabled = false;
-                    publishButton.innerHTML = 'Publish Article';
-                    return;
-                }
-                try {
-                    const response = await axios.post('/article/new', post, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    });
-                    const { slug } = response.data;
-                    if (slug) {
-                        window.location.href = `/article/${slug}`;
-                    }
-                    else{
-                        throw new Error('Error creating article');
-                    }
-                } catch (error) {
-                    showError('Error creating article');
-                    publishButton.disabled = false;
-                    publishButton.innerHTML = 'Publish Article';
-                }
-                
-                
-            });
-
-
-
-            const draftButton = document.getElementById('btn-draft');
-            draftButton.addEventListener('click', async function(e) {
-                e.preventDefault();
-                draftButton.disabled = true;
-                draftButton.innerHTML = 'Saving...';
-                const formData = new FormData(form);
-                formData.set('tags', tagsArray);
-
-                
-                const body = formData.get('content').trim()
-                
-                
-                const post = {
-                    title: formData.get('title'),
-                    category: formData.get('category'),
-                    summary: formData.get('summary'),
-                    body: DOMPurify.sanitize(formData.get('content')), //prevent xss atack
-                    tags: formData.get('tags'),
-                    image: formData.get('image'),
-                    status: 'draft'
-                };
-
-                if (post.body.replace(/<[^>]*>/g, '').trim() === '') {
-                    showError('Article body cannot be empty');
-                    draftButton.disabled = false;
-                    draftButton.innerHTML = 'Save Draft';
-                    return;
-                }
-
-                if(post.tags.trim() === ''){
-                    showError('At least one tag is required');
-                    draftButton.disabled = false;
-                    draftButton.innerHTML = 'Save Draft';
-                    return;
-                }
-                try {
-                    const response = await axios.post('/article/new', post, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    });
-                    const { slug } = response.data;
-                    if (slug) {
-                        window.location.href = `/user/drafts`;
-                    }
-                    else{
-                        throw new Error('Error creating article');
-                    }
-                } catch (error) {
-                    showError('Error creating article');
-                    draftButton.disabled = false;
-                    draftButton.innerHTML = 'Save Draft';
-                }
-                
-                
-            });
-
-            
-        });
-    </script>
-
-    
-<%- include('../partials/footer') %>
+    <%- include('../partials/footer') %>
+</body>
+</html>

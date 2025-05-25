@@ -72,10 +72,11 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       const data = response.data;
       if (data.error) {
+        showError(data.error);
         throw new Error(data.error);
       }
       if (data.message) {
-        alert(data.message);
+        showSuccess(data.message);
         window.location.reload();
       }
     } catch (error) {

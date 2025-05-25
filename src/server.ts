@@ -80,6 +80,11 @@ app.get('/validate-email', async (req, res) => {
   res.render('validate-email', { timeLeft: timeLeft as number | 0 });
 });
 
+app.get('/verify-email', async (req, res) => {
+  // if (req.session.user!.verified) return res.redirect('/');
+  res.render('verify-email');
+});
+
 app.get('/resend-otp', async (req, res) => {
   const response = sendVerificationEmail(req.session.user!.email);
   if (!response) throw new Error('Could not send email');
@@ -87,6 +92,8 @@ app.get('/resend-otp', async (req, res) => {
 });
 
 app.post('/validate-email', Auth.ValidateEmail);
+
+app.post('/verify-email', Auth.VerifyEmail);
 
 app.get('/', async (req, res) => {
   try {

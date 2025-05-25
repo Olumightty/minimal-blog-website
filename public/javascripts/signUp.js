@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </svg>
                 <h3>Account Created Successfully!</h3>
                 <p>Welcome to Minimal Blog. Check your email for confirmation.</p>
-                <a href="/validate-email" class="return-home">Verify Email</a>
+                <a href="/verify-email" class="return-home">Verify Email</a>
             </div>
         `;
 
