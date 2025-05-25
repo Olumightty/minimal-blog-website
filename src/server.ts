@@ -13,6 +13,7 @@ import { isSignedIn } from './routes/middlewares';
 import { Auth } from './controllers/AuthControllers';
 import { userRouter } from './routes/userRoute';
 import { articleRouter } from './routes/articleRoute';
+import jwt from 'jsonwebtoken';
 
 declare module 'express-session' {
   interface SessionData {
@@ -90,6 +91,23 @@ app.get('/resend-otp', async (req, res) => {
   if (!response) throw new Error('Could not send email');
   res.status(201).json({ message: 'Email successfully sent', sent: true });
 });
+
+app.get('/forgot-password', (req, res) => {
+  res.render('forgot-password');
+});
+
+app.get('/reset-password', (req, res) => {
+  const token = req.query.token;
+  let invalid = ''
+  if (!token) invalid = 'Invalid Reset Link';
+  const verifyToken = jwt.verify(token as string, process.env.JWT_SECRET as string);
+  if (!verifyToken) invalid = 'Invalid Reset Link';
+  res.render('reset-password', { invalid, token: invalid == '' ? token : '' });
+});
+
+// app.post('/reset-password', Auth.ResetPassword);
+
+app.post('/forgot-password', Auth.ForgotPassword);
 
 app.post('/validate-email', Auth.ValidateEmail);
 

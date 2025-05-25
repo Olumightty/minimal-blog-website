@@ -3,7 +3,8 @@ import { Request, Response } from 'express';
 import { Profile, User } from '../DB/schemas';
 import { loginSchema, newUserSchema } from '../lib/zod';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { sendVerificationEmail } from '../lib/mailing';
+import { sendPasswordResetEmail, sendVerificationEmail } from '../lib/mailing';
+import { token } from 'morgan';
 
 class AuthController {
   SignIn = async (req: Request, res: Response) => {
@@ -137,6 +138,23 @@ class AuthController {
     }
     
   };
+
+  ForgotPassword = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    try {
+      const user = await User.findOne({ email });
+      if(!user) {
+        res.status(400).json({ message: 'Email does not exist', status: false});
+        return
+      }
+      const response = await sendPasswordResetEmail(req.body.email);
+      if (!response) throw new Error('Could not send email');
+      res.status(201).json({ message: 'Email successfully sent', status: true, token: response.otpToken });
+    } catch (error) {
+      res.status(400).json({error, status: false});
+      throw new Error(`Failed to send email ${error}`);
+    }
+  }
 }
 
 export const Auth = new AuthController();
