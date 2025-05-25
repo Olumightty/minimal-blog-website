@@ -98,14 +98,14 @@ app.get('/forgot-password', (req, res) => {
 
 app.get('/reset-password', (req, res) => {
   const token = req.query.token;
-  let invalid = ''
-  if (!token) invalid = 'Invalid Reset Link';
+  if(!token) return res.render('404');
+  let invalid = false
   const verifyToken = jwt.verify(token as string, process.env.JWT_SECRET as string);
-  if (!verifyToken) invalid = 'Invalid Reset Link';
-  res.render('reset-password', { invalid, token: invalid == '' ? token : '' });
+  if (!verifyToken) invalid = true;
+  res.render('reset-password', { invalid, token: !invalid ? token : '' });
 });
 
-// app.post('/reset-password', Auth.ResetPassword);
+app.post('/reset-password', Auth.ResetPassword);
 
 app.post('/forgot-password', Auth.ForgotPassword);
 
