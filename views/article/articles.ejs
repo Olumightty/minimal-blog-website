@@ -5,80 +5,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Articles | Minimal Blog</title>
     <link rel="stylesheet" href="/stylesheets/articles.css">
-    <link rel="stylesheet" href="/stylesheets/common.css">
-    <link rel="stylesheet" href="/stylesheets/responsive.css">
+    <!-- <link rel="stylesheet" href="/stylesheets/common.css">
+    <link rel="stylesheet" href="/stylesheets/responsive.css"> -->
 </head>
 <body>
     
     <%- include('../partials/navbar') %>
-    <main class="articles-page">
-    <section class="articles-header">
-        <h2>All Articles</h2>
-        <div class="filter-controls">
-            <label for="category-filter">Filter by:</label>
-            <select  id="category-filter">
-                <option value="all">All Categories</option>
-                <option value="design">Design</option>
-                <option value="technology">Technology</option>
-                <option value="lifestyle">Lifestyle</option>
-                <option value="productivity">Productivity</option>
-                <option value="creativity">Creativity</option>
-            </select>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Discover Amazing
+                    <span class="gradient-text">Stories</span>
+                </h1>
+                <p class="hero-description">
+                    Explore our collection of carefully curated articles across design, technology, lifestyle, and more.
+                </p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number"><%= posts.length %></span>
+                    <span class="stat-label">Articles</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-background">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+            </div>
         </div>
     </section>
 
-
-    <section class="articles-grid">
-        
-        <% posts.forEach((post) =>{ %>
-            <article class="article-card">
-                <div class="article-image" style="background-image: url('<%= post.imageUrl %>')"></div>
-                <div class="article-content">
-                    <p class="article-date"><%= post.created_at.toDateString()%></p>
-                    <h2 class="article-title"><%= post.title %></h2>
-                    <p class="article-excerpt"><%= post.summary %></p>
-                    <div class="article-meta">
-                        <span class="article-category"><%= post.category %></span>
-                        <a href="/article/<%= post.slug %>" class="read-more">Continue Reading →</a>
+    <main class="articles-page" id="posts">
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-container">
+                <div class="filter-header">
+                    <h2 class="filter-title">All Articles</h2>
+                    <div class="filter-controls">
+                        <label for="category-filter" class="filter-label">
+                            <svg class="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"/>
+                            </svg>
+                            Filter by Category
+                        </label>
+                        <select id="category-filter" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="design">Design</option>
+                            <option value="technology">Technology</option>
+                            <option value="lifestyle">Lifestyle</option>
+                            <option value="productivity">Productivity</option>
+                            <option value="creativity">Creativity</option>
+                        </select>
                     </div>
                 </div>
-            </article>
-        <% }) %>
+                
+                <!-- Category Pills -->
+                <div class="category-pills">
+                    <button class="category-pill active" data-category="all">
+                        <span class="pill-icon">🎯</span>
+                        All
+                    </button>
+                    <button class="category-pill" data-category="design">
+                        <span class="pill-icon">🎨</span>
+                        Design
+                    </button>
+                    <button class="category-pill" data-category="technology">
+                        <span class="pill-icon">💻</span>
+                        Technology
+                    </button>
+                    <button class="category-pill" data-category="lifestyle">
+                        <span class="pill-icon">🌟</span>
+                        Lifestyle
+                    </button>
+                    <button class="category-pill" data-category="productivity">
+                        <span class="pill-icon">⚡</span>
+                        Productivity
+                    </button>
+                    <button class="category-pill" data-category="creativity">
+                        <span class="pill-icon">✨</span>
+                        Creativity
+                    </button>
+                </div>
+            </div>
+        </section>
 
-        
+        <!-- Articles Grid -->
+        <section class="articles-container">
+            <div class="articles-grid">
+                <% posts.forEach((post, index) => { %>
+                    <article class="article-card" data-category="<%= post.category %>" style="animation-delay: <%= index * 0.1 %>s">
+                        <div class="article-image-container">
+                            <div class="article-image" style="background-image: url('<%= post.imageUrl %>')">
+                                <div class="image-overlay"></div>
+                                <div class="category-badge">
+                                    <%= post.category %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="article-content">
+                            <div class="article-meta-top">
+                                <time class="article-date" datetime="<%= post.created_at.toISOString() %>">
+                                    <svg class="date-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    <%= post.created_at.toDateString() %>
+                                </time>
+                            </div>
+                            <h3 class="article-title">
+                                <a href="/article/<%= post.slug %>" class="title-link">
+                                    <%= post.title %>
+                                </a>
+                            </h3>
+                            <p class="article-excerpt"><%= post.summary %></p>
+                            <div class="article-footer">
+                                <a href="/article/<%= post.slug %>" class="read-more-btn">
+                                    <span>Continue Reading</span>
+                                    <svg class="arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
 
-    </section>
-    <% if (posts.length === 0) { %><p class="no-articles">We have nothing to show. No posts found.</p><% } %>
+            <% if (posts.length === 0) { %>
+                <div class="no-articles">
+                    <div class="no-articles-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3>No Articles Found</h3>
+                    <p>We couldn't find any articles matching your criteria. Try adjusting your filters or check back later.</p>
+                </div>
+            <% } %>
+        </section>
 
-    <div class="pagination">
-        <% if (currentPage > 1){ %>
-            <a href="?page=<%= currentPage - 1 %>&category=<%= currentCategory %>" class="next-page">← Prev</a>
+        <!-- Enhanced Pagination -->
+        <% if (totalPages > 1) { %>
+            <nav class="pagination-nav" aria-label="Article pagination">
+                <div class="pagination">
+                    <% if (currentPage > 1) { %>
+                        <a href="?page=<%= currentPage - 1 %>&category=<%= currentCategory %>" class="pagination-btn pagination-prev">
+                            <svg class="pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            Previous
+                        </a>
+                    <% } %>
+                    
+                    <div class="pagination-numbers">
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <a href="?page=<%= i %>&category=<%= currentCategory %>" 
+                               class="pagination-number <%= i === currentPage ? 'active' : '' %>"
+                               <% if (i === currentPage) { %>aria-current="page"<% } %>>
+                                <%= i %>
+                            </a>
+                        <% } %>
+                    </div>
+                    
+                    <% if (currentPage < totalPages) { %>
+                        <a href="?page=<%= currentPage + 1 %>&category=<%= currentCategory %>" class="pagination-btn pagination-next">
+                            Next
+                            <svg class="pagination-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    <% } %>
+                </div>
+                
+                <div class="pagination-info">
+                    <span>Page <%= currentPage %> of <%= totalPages %></span>
+                </div>
+            </nav>
         <% } %>
-        
-        <% for (let i = 1; i <= totalPages; i++) { %>
-            <a href="?page=<%= i %>&category=<%= currentCategory %>" class="page-number <%= i === currentPage ? 'current' : '' %>"><%= i %></a>
-        <% } %>
-        <% if (currentPage < totalPages){ %>
-            <a href="?page=<%= currentPage + 1 %>&category=<%= currentCategory %>" class="next-page">Next →</a>
-        <% } %>
-    </div>
     </main>
 
-    <script>
-        const categoryFilter = document.getElementById('category-filter');
-
-        //initial filtervalue based on search params
-        const urlParams = new URLSearchParams(window.location.search);
-        const initialCategory = urlParams.get('category') || 'all';
-        categoryFilter.value = initialCategory;
-
-        categoryFilter.addEventListener('change', () => {
-            const selectedCategory = categoryFilter.value;
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('category', selectedCategory);
-            urlParams.set('page', 1);
-            window.location.search = urlParams.toString();
-        });
-    </script>
-<%- include('../partials/toaster') %>
-<%- include('../partials/footer') %>
+    <script src="/javascripts/articles.js"></script>
+    <%- include('../partials/toaster') %>
+    <%- include('../partials/footer') %>
+</body>
+</html>

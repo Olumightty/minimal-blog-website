@@ -5,62 +5,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Minimal Blog</title>
     <link rel="stylesheet" href="/stylesheets/home.css">
-    <link rel="stylesheet" href="/stylesheets/common.css">
-    <link rel="stylesheet" href="/stylesheets/responsive.css">
+    <!-- <link rel="stylesheet" href="/stylesheets/common.css">
+    <link rel="stylesheet" href="/stylesheets/responsive.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <%- include('partials/navbar') %>
-    <main>
-        <section class="posts">
-
-            <% if (recentPosts.length === 0) { %>
-                <div class="no-articles">
-                   <p>We have nothing to show. No posts found.</p>
-                    <a href="/article/new" class="new-article-btn">+ New Article</a></li>
-                </div>
-            <% } %>
-             <% if (recentPosts.length > 0) {recentPosts.forEach((post) => { %>
-                <article>
-                    <div class="article-image" style="background-image: url('<%= post.imageUrl %>')"></div>
-                    <div class="article-content">
-                        <p class="article-date"><%= post.created_at.toDateString()%></p>
-                        <h2 class="article-title"><%= post.title %></h2>
-                        <p class="article-excerpt"><%= post.summary %></p>
-                        <a href="/article/<%= post.slug %>" class="read-more">Continue Reading →</a>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Minimal Blog</h1>
+                <p class="hero-subtitle">Exploring design, technology, and mindful living</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number"><%= recentPosts.length %></span>
+                        <span class="stat-label">Articles</span>
                     </div>
-                </article>
-             <% })} %>
-
-        </section>
-            
-
-
-        <aside>
-            <div class="sidebar-section about-me">
-                <h3 class="sidebar-title">About Me</h3>
-                <p>Hello! I'm a writer and designer passionate about creating meaningful, minimal experiences. This blog explores design, technology, and mindful living.</p>
-                <a href="/about" class="read-more">More About Me →</a>
+                    <div class="stat">
+                        <span class="stat-number"><%= countByCategory.length %></span>
+                        <span class="stat-label">Categories</span>
+                    </div>
+                </div>
             </div>
-
-            <div class="sidebar-section categories">
-                <h3 class="sidebar-title">Categories</h3>
-                <ul>
-                    <% countByCategory.forEach((category) => { %>
-                        <li><a href="/articles?category=<%= category.category %>"><%= category.category.charAt(0).toUpperCase() + category.category.slice(1) %> <span class="category-count"><%= category.count %></span></a></li>
-                    <% }) %>
-                </ul>
+            <div class="hero-visual">
+                <div class="floating-cards">
+                    <div class="card card-1"></div>
+                    <div class="card card-2"></div>
+                    <div class="card card-3"></div>
+                </div>
             </div>
+        </div>
+        <div class="hero-scroll">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
 
-            <div class="sidebar-section">
-                <h3 class="sidebar-title">Subscribe</h3>
-                <p>Stay updated with the latest posts.</p>
-                <form class="subscribe-form">
-                    <input type="email" placeholder="Your email address" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
-        </aside>
+    <main class="main-content">
+        <div class="content-wrapper">
+            <section class="posts-section">
+                <div class="section-header">
+                    <h2 class="section-title">Latest Articles</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <% if (recentPosts.length === 0) { %>
+                    <div class="no-articles">
+                        <div class="no-articles-icon">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <h3>No Articles Yet</h3>
+                        <p>Start your blogging journey by creating your first article.</p>
+                        <a href="/article/new" class="cta-button">
+                            <i class="fas fa-plus"></i>
+                            Create First Article
+                        </a>
+                    </div>
+                <% } %>
+
+                <div class="posts-grid">
+                    <% if (recentPosts.length > 0) { recentPosts.forEach((post, index) => { %>
+                        <article class="post-card" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+                            <div class="post-image">
+                                <img src="<%= post.imageUrl %>" alt="<%= post.title %>" loading="lazy">
+                                <div class="post-overlay">
+                                    <a href="/article/<%= post.slug %>" class="read-more-overlay">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <time class="post-date">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <%= post.created_at.toDateString() %>
+                                    </time>
+                                    <span class="reading-time">3 min read</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/article/<%= post.slug %>"><%= post.title %></a>
+                                </h3>
+                                <p class="post-excerpt"><%= post.summary %></p>
+                                <a href="/article/<%= post.slug %>" class="read-more">
+                                    Continue Reading
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </article>
+                    <% })} %>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <div class="sidebar-card about-me">
+                    <div class="card-header">
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 class="card-title">About Me</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Hello! I'm a writer and designer passionate about creating meaningful, minimal experiences. This blog explores design, technology, and mindful living.</p>
+                        <a href="/about" class="card-link">
+                            More About Me
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="sidebar-card categories">
+                    <div class="card-header">
+                        <div class="icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3 class="card-title">Categories</h3>
+                    </div>
+                    <div class="card-content">
+                        <ul class="categories-list">
+                            <% countByCategory.forEach((category) => { %>
+                                <li class="category-item">
+                                    <a href="/article?category=<%= category.category %>" class="category-link">
+                                        <span class="category-name">
+                                            <%= category.category.charAt(0).toUpperCase() + category.category.slice(1) %>
+                                        </span>
+                                        <span class="category-count"><%= category.count %></span>
+                                    </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="sidebar-card newsletter">
+                    <div class="card-header">
+                        <div class="icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3 class="card-title">Stay Updated</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Get the latest articles delivered to your inbox.</p>
+                        <form class="newsletter-form" id="newsletter-form">
+                            <div class="input-group">
+                                <input type="email" placeholder="Enter your email" required>
+                                <button type="submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+        </div>
     </main>
+
     <%- include('partials/toaster') %>
-<%- include('partials/footer') %>
+    <%- include('partials/footer') %>
+    
+    <script src="/javascripts/home.js"></script>
+</body>
+</html>

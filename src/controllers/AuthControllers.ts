@@ -3,7 +3,10 @@ import { Request, Response } from 'express';
 import { Profile, User } from '../DB/schemas';
 import { loginSchema, newUserSchema } from '../lib/zod';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { sendVerificationEmail } from '../lib/mailing';
+import { sendPasswordResetEmail, sendVerificationEmail } from '../lib/mailing';
+import { token } from 'morgan';
+import { z } from 'zod';
+import { DOMPurify } from '../server';
 
 class AuthController {
   SignIn = async (req: Request, res: Response) => {
@@ -84,8 +87,7 @@ class AuthController {
           verified: newUser.verified,
           avatar: newUser.avatar!,
         };
-        const response = sendVerificationEmail(req.session.user!.email);
-        if (!response) console.log('Could not send email'); //logger
+        
         res
           .status(201)
           .json({ message: 'account successfully created', created: true });
@@ -125,6 +127,64 @@ class AuthController {
         .json({ message: 'Email successfully verified', verified: true });
     } catch (error) {
       throw new Error(`Failed to verify email ${error}`);
+    }
+  };
+
+  VerifyEmail = async (req: Request, res: Response) => {
+    try {
+      const response = sendVerificationEmail(req.session.user!.email);
+      if (!response) throw new Error('Could not send email');
+      res.status(201).json({ message: 'Email successfully sent', status: true });
+    } catch (error) {
+      throw new Error(`Failed to send email ${error}`);
+    }
+    
+  };
+
+  ForgotPassword = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    const validateEmail = z.string().email().transform((email) => DOMPurify.sanitize(email));
+    const va = validateEmail.safeParse(email);
+
+    try {
+      if(!va) {
+        res.status(400).json({ message: 'Invalid Email', status: false});
+        return
+      }
+      const user = await User.findOne({ email });
+      if(!user) {
+        res.status(400).json({ message: 'Email does not exist', status: false});
+        return
+      }
+      const response = await sendPasswordResetEmail(req.body.email);
+      if (!response) throw new Error('Could not send email');
+      res.status(201).json({ message: 'Email successfully sent', status: true, token: response.otpToken });
+    } catch (error) {
+      res.status(400).json({error, status: false});
+      throw new Error(`Failed to send email ${error}`);
+    }
+  };
+
+  ResetPassword = async (req: Request, res: Response) => {
+    const { newPassword, confirmPassword, resetToken } = req.body;
+    try {
+      const verifyToken = jwt.verify(resetToken as string, process.env.JWT_SECRET as string) as JwtPayload;
+      if (!verifyToken) throw new Error('Invalid token');
+      const user = await User.findOne({ email: verifyToken.email });
+      if (!user) throw new Error('Invalid token');
+      if (newPassword !== confirmPassword) throw new Error('Passwords do not match');
+      const hashPassword = await bcrypt.hash(newPassword, Number(process.env.SALT_ROUNDS));
+      if (!hashPassword) throw new Error('Could not hash password');
+      const updatePassword = await User.updateOne( 
+        { email: user.email },
+        { $set: { password: hashPassword, resetToken: null } }
+      );
+      if (!updatePassword.acknowledged)
+        throw new Error('Could not update password');
+      res.status(201).json({ message: 'Password successfully updated', status: true });
+    } catch (error) {
+      res.status(400).json({error, status: false});
+      throw new Error(`Failed to update password ${error}`);
     }
   };
 }

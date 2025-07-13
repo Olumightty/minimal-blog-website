@@ -34,3 +34,23 @@ export const getOTPTime = async (email: string) => {
     return error ? false : false;
   }
 };
+
+
+export const sendPasswordResetEmail = async (email: string) => {
+  const otp = Math.floor(1000 + Math.random() * 9000).toString(); //randomly generate 4 digit otp
+  try {
+    const otpToken = jwt.sign({ otp, email }, process.env.JWT_SECRET as string, {
+      expiresIn: '5h',
+    });
+    if (!otpToken) throw new Error('Could not generate token');
+    const addToken = await User.updateOne(
+      { email },
+      { $set: { resetToken: otpToken } }
+    );
+    if (!addToken) throw new Error('Could not insert reset token to user');
+    console.log(`${process.env.SERVER_URL}/reset-password?token=${otpToken}`); //send otp to email
+    return {otpToken};
+  } catch (error) {
+    return error ? false : false;
+  }
+};
