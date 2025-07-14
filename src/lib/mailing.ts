@@ -3,12 +3,12 @@ import { User } from '../DB/schemas';
 import nodemailer from 'nodemailer';
 
 var transport = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
+  host: process.env.SMTP_HOST as string,
+  port: process.env.SMTP_PORT as unknown as number,
   secure: true, // true for 465, false for 587
   auth: {
-    user: "ayoolaolumide98@gmail.com",
-    pass: "ffgtgkvgifjsyvxx"
+    user: process.env.SMTP_USER as string,
+    pass: process.env.SMTP_PASSWORD as string
   },
   tls: {
     rejectUnauthorized: false
