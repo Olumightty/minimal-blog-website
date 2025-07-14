@@ -153,6 +153,9 @@ app.get('/user/avatar', (req, res) => {
 app.get ('/about', (req, res) => {
   res.render('about');
 })
+app.get ('/contact', (req, res) => {
+  res.render('contact');
+})
 
 // app.get("/migrate", (req, res) => {
 //     migratePosts();

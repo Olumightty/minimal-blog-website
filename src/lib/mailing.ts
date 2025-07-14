@@ -1,5 +1,16 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from '../DB/schemas';
+import nodemailer from 'nodemailer';
+
+var transport = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "30a21c9fd2a55b",
+    pass: "76361106c30702"
+  }
+});
+
 
 export const sendVerificationEmail = async (email: string) => {
   const otp = Math.floor(1000 + Math.random() * 9000).toString(); //randomly generate 4 digit otp
@@ -48,7 +59,20 @@ export const sendPasswordResetEmail = async (email: string) => {
       { $set: { resetToken: otpToken } }
     );
     if (!addToken) throw new Error('Could not insert reset token to user');
-    console.log(`${process.env.SERVER_URL}/reset-password?token=${otpToken}`); //send otp to email
+    const resetURL = `${process.env.SERVER_URL}/reset-password?token=${otpToken}`; //send otp to email
+
+
+
+
+    const info = await transport.sendMail({
+      from: '"Maddison Foo Koch" <zakary.gutmann@ethereal.email>',
+      to: "bar@example.com, baz@example.com",
+      subject: "Hello ✔",
+      text: "Hello world?", // plain‑text body
+      html: `<a href="${resetURL}"><button>Rest Password</button></a>`, // HTML body
+    });
+  
+    console.log("Message sent:", info.messageId);
     return {otpToken};
   } catch (error) {
     return error ? false : false;

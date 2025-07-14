@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Modern Blog Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 4rem 0;
+      color: white;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 3rem;
+      margin-top: 2rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 3rem;
+    }
+    
+    .contact-form {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #667eea;
+      font-weight: 600;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #e1e8ff;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8f9ff;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .section {
+      margin-bottom: 3rem;
+    }
+    
+    .section h2 {
+      color: #667eea;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    .section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      border-radius: 2px;
+    }
+    
+    .section p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+    
+    .contact-card {
+      background: linear-gradient(145deg, #f8f9ff, #e8ecff);
+      padding: 2rem;
+      border-radius: 15px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+    }
+    
+    .contact-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    
+    .contact-card h3 {
+      color: #667eea;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+    
+    .contact-card p {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .contact-card a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .contact-card a:hover {
+      text-decoration: underline;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 50%;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    .response-time {
+      background: linear-gradient(145deg, #667eea, #764ba2);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 15px;
+      margin-top: 3rem;
+      text-align: center;
+    }
+    
+    .response-time h2 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+    
+    .response-time h2::after {
+      display: none;
+    }
+    
+    .response-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .response-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .response-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .response-time-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    
+    .response-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border: 1px solid #c3e6cb;
+      display: none;
+    }
+    
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border: 1px solid #f5c6cb;
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .content {
+        padding: 2rem;
+      }
+      
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .contact-form {
+        padding: 2rem;
+      }
+      
+      .social-links {
+        justify-content: center;
+      }
+      
+      .response-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+    <%- include('partials/navbar') %>
+  <div class="container">
+    <div class="hero">
+      <h1>Get In Touch</h1>
+      <p>Have a question, want to collaborate, or just say hello? I'd love to hear from you!</p>
+    </div>
+    
+    <div class="content">
+      <div class="contact-grid">
+        <div class="contact-form">
+          <h2>Send a Message</h2>
+          <div class="success-message" id="successMessage">
+            Thanks for your message! I'll get back to you soon.
+          </div>
+          <div class="error-message" id="errorMessage">
+            Please fill in all required fields.
+          </div>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Your Name *</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <input type="text" id="subject" name="subject" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" placeholder="Tell me about your project, question, or just say hello!" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn">Send Message</button>
+          </form>
+        </div>
+        
+        <div class="contact-info">
+          <div class="contact-card">
+            <div class="contact-icon">📧</div>
+            <h3>Email Me</h3>
+            <p>For business inquiries, collaborations, or general questions</p>
+            <a href="mailto:your.email@example.com">ayoolaolumide98@gmail.com</a>
+          </div>
+          
+          <div class="contact-card">
+            <div class="contact-icon">💼</div>
+            <h3>Professional Network</h3>
+            <p>Connect with me on professional platforms</p>
+            <div class="social-links">
+              <a href="https://linkedin.com/in/yourprofile" class="social-link" target="_blank"><img width="40" style="border-radius: 50%;" src="/images/linkedin-icon.png" alt=""></a>
+              <a href="https://github.com/yourusername" class="social-link" target="_blank"><img width="40" src="/images/github-icon.png" alt=""></a>
+              <a href="https://twitter.com/yourusername" class="social-link" target="_blank"><img width="40" src="/images/instagram-icon.png" alt=""></a>
+            </div>
+          </div>
+          
+          <div class="contact-card">
+            <div class="contact-icon">🌍</div>
+            <h3>Location</h3>
+            <p>Based in Abuja, Nigeria</p>
+            <p>Available for remote work worldwide</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>Let's Collaborate</h2>
+        <p>I'm always interested in discussing new projects, creative ideas, or opportunities to be part of your vision. Whether you're looking for a full-stack developer, need help with a specific project, or want to explore potential collaborations, I'm here to help.</p>
+        <p>Feel free to reach out about web development projects, technical consulting, or if you just want to connect with a fellow developer. I enjoy working on challenging projects that push the boundaries of what's possible with modern web technologies.</p>
+      </div>
+    </div>
+    
+    <div class="response-time">
+      <h2>Response Time</h2>
+      <p>I strive to respond to all inquiries promptly. Here's what you can expect:</p>
+      <div class="response-grid">
+        <div class="response-item">
+          <div class="response-icon">⚡</div>
+          <div class="response-time-value">< 24 hours</div>
+          <div class="response-label">General Inquiries</div>
+        </div>
+        <div class="response-item">
+          <div class="response-icon">💼</div>
+          <div class="response-time-value">< 48 hours</div>
+          <div class="response-label">Project Discussions</div>
+        </div>
+        <div class="response-item">
+          <div class="response-icon">🤝</div>
+          <div class="response-time-value">< 72 hours</div>
+          <div class="response-label">Collaboration Proposals</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+      
+      const successMessage = document.getElementById('successMessage');
+      const errorMessage = document.getElementById('errorMessage');
+      
+      // Hide previous messages
+      successMessage.style.display = 'none';
+      errorMessage.style.display = 'none';
+      
+      // Basic validation
+      if (!name || !email || !subject || !message) {
+        errorMessage.style.display = 'block';
+        return;
+      }
+      
+      // Email validation
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        errorMessage.textContent = 'Please enter a valid email address.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+      
+      // Simulate form submission
+      const submitButton = document.querySelector('.btn');
+      const originalText = submitButton.textContent;
+      submitButton.textContent = 'Sending...';
+      submitButton.disabled = true;
+      
+      setTimeout(() => {
+        successMessage.style.display = 'block';
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+        
+        // Reset form
+        document.getElementById('contactForm').reset();
+        
+        // Scroll to success message
+        successMessage.scrollIntoView({ behavior: 'smooth' });
+      }, 2000);
+    });
+    
+    // Add smooth animations to form inputs
+    document.querySelectorAll('input, textarea').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.transform = 'translateY(-2px)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+</body>
+</html>
