@@ -3,11 +3,15 @@ import { User } from '../DB/schemas';
 import nodemailer from 'nodemailer';
 
 var transport = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // true for 465, false for 587
   auth: {
-    user: "30a21c9fd2a55b",
-    pass: "76361106c30702"
+    user: "ayoolaolumide98@gmail.com",
+    pass: "ffgtgkvgifjsyvxx"
+  },
+  tls: {
+    rejectUnauthorized: false
   }
 });
 
@@ -25,6 +29,15 @@ export const sendVerificationEmail = async (email: string) => {
     );
     if (!addToken) throw new Error('Could not insert token to user');
     console.log(otp); //send otp to email
+
+    const info = await transport.sendMail({
+      from: '"Ayoola Olumide" <ayoolaolumide98@gmail.com>',
+      to: email,
+      subject: "Reset Password",
+      html: `<h1>${otp}</button></h1>`, // HTML body
+    });
+
+    console.log("OTP Message sent:", info.messageId);
     return true;
   } catch (error) {
     return error ? false : false;
@@ -65,16 +78,16 @@ export const sendPasswordResetEmail = async (email: string) => {
 
 
     const info = await transport.sendMail({
-      from: '"Maddison Foo Koch" <zakary.gutmann@ethereal.email>',
-      to: "bar@example.com, baz@example.com",
-      subject: "Hello ✔",
-      text: "Hello world?", // plain‑text body
+      from: '"Ayoola Olumide" <ayoolaolumide98@gmail.com>',
+      to: email,
+      subject: "Reset Password",
       html: `<a href="${resetURL}"><button>Rest Password</button></a>`, // HTML body
     });
   
-    console.log("Message sent:", info.messageId);
+    console.log("Reset Message sent:", info.messageId);
     return {otpToken};
   } catch (error) {
+    // console.log(error);
     return error ? false : false;
   }
 };
