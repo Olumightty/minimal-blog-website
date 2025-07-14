@@ -1,5 +1,20 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from '../DB/schemas';
+import nodemailer from 'nodemailer';
+
+var transport = nodemailer.createTransport({
+  host: process.env.SMTP_HOST as string,
+  port: process.env.SMTP_PORT as unknown as number,
+  secure: true, // true for 465, false for 587
+  auth: {
+    user: process.env.SMTP_USER as string,
+    pass: process.env.SMTP_PASSWORD as string
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
+
 
 export const sendVerificationEmail = async (email: string) => {
   const otp = Math.floor(1000 + Math.random() * 9000).toString(); //randomly generate 4 digit otp
@@ -14,6 +29,15 @@ export const sendVerificationEmail = async (email: string) => {
     );
     if (!addToken) throw new Error('Could not insert token to user');
     console.log(otp); //send otp to email
+
+    const info = await transport.sendMail({
+      from: '"Ayoola Olumide" <ayoolaolumide98@gmail.com>',
+      to: email,
+      subject: "Reset Password",
+      html: `<h1>${otp}</button></h1>`, // HTML body
+    });
+
+    console.log("OTP Message sent:", info.messageId);
     return true;
   } catch (error) {
     return error ? false : false;
@@ -48,9 +72,22 @@ export const sendPasswordResetEmail = async (email: string) => {
       { $set: { resetToken: otpToken } }
     );
     if (!addToken) throw new Error('Could not insert reset token to user');
-    console.log(`${process.env.SERVER_URL}/reset-password?token=${otpToken}`); //send otp to email
+    const resetURL = `${process.env.SERVER_URL}/reset-password?token=${otpToken}`; //send otp to email
+
+
+
+
+    const info = await transport.sendMail({
+      from: '"Ayoola Olumide" <ayoolaolumide98@gmail.com>',
+      to: email,
+      subject: "Reset Password",
+      html: `<a href="${resetURL}"><button>Rest Password</button></a>`, // HTML body
+    });
+  
+    console.log("Reset Message sent:", info.messageId);
     return {otpToken};
   } catch (error) {
+    // console.log(error);
     return error ? false : false;
   }
 };

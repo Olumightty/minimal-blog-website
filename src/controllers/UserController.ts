@@ -39,7 +39,7 @@ class UserController {
         recoveryEmail: validate.data.recovery_email,
       },
     };
-    console.log(validate.data.social_links);
+    // console.log(validate.data.social_links);
     try {
       let avatar = req.file ? await uploadImage(req.file!) : '';
       // console.log(avatar)
