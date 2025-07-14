@@ -83,7 +83,7 @@ articleRouter.get('/:slug', async (req, res) => {
       slug: slug,
       status: 'published',
     }).populate('author_id');
-    console.log(post);
+    // console.log(post);
 
     if (!post) {
       res.status(404).render('404');
