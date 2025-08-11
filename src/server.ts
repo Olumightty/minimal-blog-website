@@ -76,13 +76,18 @@ app.post('/signin', Auth.SignIn);
 
 app.post('/signup', Auth.SignUp);
 
-app.get('/validate-email', async (req, res) => {
+app.get('/validate-email', isSignedIn, async (req, res) => {
+  if (req.session.user!.verified) return res.redirect('/');
   const timeLeft = await getOTPTime(req.session.user!.email);
+  if (timeLeft === false) {
+    res.redirect('/verify-email');
+    return;
+  }
   res.render('validate-email', { timeLeft: timeLeft as number | 0 });
 });
 
-app.get('/verify-email', async (req, res) => {
-  // if (req.session.user!.verified) return res.redirect('/');
+app.get('/verify-email', isSignedIn, async (req, res) => {
+  if (req.session.user!.verified) return res.redirect('/');
   res.render('verify-email');
 });
 
@@ -149,6 +154,13 @@ app.get('/user/avatar', (req, res) => {
     res.json({ avatar, name });
   }
 });
+
+app.get ('/about', (req, res) => {
+  res.render('about');
+})
+app.get ('/contact', (req, res) => {
+  res.render('contact');
+})
 
 // app.get("/migrate", (req, res) => {
 //     migratePosts();

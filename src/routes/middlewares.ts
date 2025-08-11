@@ -9,7 +9,7 @@ export const userVerfied = (
     if (req.url === '/validate-email') return res.redirect('/');
     next();
   } else {
-    res.render('validate-email'); // a prompt to verify your email
+    res.redirect('/verify-email'); // a prompt to verify your email
   }
 };
 

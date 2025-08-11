@@ -3,7 +3,7 @@ import { Post } from '../DB/schemas';
 import { Article } from '../controllers/ArticleController';
 import multer from 'multer';
 import path from 'path';
-import { isSignedIn } from './middlewares';
+import { isSignedIn, userVerfied } from './middlewares';
 
 const storage = multer.diskStorage({
   //ensures multipart/form-data is parsed
@@ -71,7 +71,7 @@ articleRouter.get('/', async (req, res) => {
   }
 });
 
-articleRouter.get('/new', isSignedIn, (req, res) => {
+articleRouter.get('/new', isSignedIn,userVerfied, (req, res) => {
   res.render('article/new');
 });
 
@@ -83,7 +83,7 @@ articleRouter.get('/:slug', async (req, res) => {
       slug: slug,
       status: 'published',
     }).populate('author_id');
-    console.log(post);
+    // console.log(post);
 
     if (!post) {
       res.status(404).render('404');
@@ -96,4 +96,4 @@ articleRouter.get('/:slug', async (req, res) => {
   }
 });
 
-articleRouter.post('/new', upload.single('image'), Article.NewArticle);
+articleRouter.post('/new', isSignedIn, userVerfied, upload.single('image'), Article.NewArticle);
