@@ -3,10 +3,11 @@ import { getUserId } from '../lib/helpers';
 import { Post, Profile } from '../DB/schemas';
 import { upload } from './articleRoute';
 import { UserAction } from '../controllers/UserController';
+import { isSignedIn, userVerfied } from './middlewares';
 
 export const userRouter = express.Router();
 
-userRouter.get('/profile', async (req, res) => {
+userRouter.get('/profile', isSignedIn, userVerfied, async (req, res) => {
   try {
     const id = await getUserId(req.session.user!.email);
     if (!id) throw new Error('User not found');
@@ -19,12 +20,14 @@ userRouter.get('/profile', async (req, res) => {
 });
 
 userRouter.patch(
-  '/profile',
+  '/profile', 
+  isSignedIn, 
+  userVerfied,
   upload.single('avatar'),
   UserAction.UpdateProfile as undefined
 );
 
-userRouter.get('/drafts', async (req, res) => {
+userRouter.get('/drafts', isSignedIn, userVerfied, async (req, res) => {
   try {
     const id = await getUserId(req.session.user!.email);
     if (!id) throw new Error('User not found');
@@ -54,7 +57,7 @@ userRouter.get('/drafts', async (req, res) => {
   }
 });
 
-userRouter.get('/articles/edit/:id', async (req, res) => {
+userRouter.get('/articles/edit/:id', isSignedIn, userVerfied, async (req, res) => {
   const id = req.params.id;
 
   try {
@@ -77,13 +80,15 @@ userRouter.get('/articles/edit/:id', async (req, res) => {
 
 userRouter.patch(
   '/articles/edit/:id',
+  isSignedIn,
+  userVerfied,
   upload.single('image'),
   UserAction.UpdateArticle as undefined
 );
 
 // userRouter.get('/drafts/delete/:id', UserAction.DeleteArticle as undefined);
 
-userRouter.get('/articles', async (req, res) => {
+userRouter.get('/articles', isSignedIn, userVerfied, async (req, res) => {
   try {
     const id = await getUserId(req.session.user!.email);
     if (!id) throw new Error('User not found');
@@ -118,5 +123,7 @@ userRouter.get('/articles', async (req, res) => {
 
 userRouter.delete(
   '/articles/delete/:id',
+  isSignedIn,
+  userVerfied,
   UserAction.DeleteArticle as undefined
 );

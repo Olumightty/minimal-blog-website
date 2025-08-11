@@ -1,6 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from '../DB/schemas';
 import nodemailer from 'nodemailer';
+import { emailVerifyTemplate, passwordResetTemplate } from './constants';
 
 var transport = nodemailer.createTransport({
   host: process.env.SMTP_HOST as string,
@@ -34,7 +35,7 @@ export const sendVerificationEmail = async (email: string) => {
       from: '"Ayoola Olumide" <ayoolaolumide98@gmail.com>',
       to: email,
       subject: "Reset Password",
-      html: `<h1>${otp}</button></h1>`, // HTML body
+      html: emailVerifyTemplate(otp, email), // HTML body
     });
 
     console.log("OTP Message sent:", info.messageId);
@@ -81,7 +82,7 @@ export const sendPasswordResetEmail = async (email: string) => {
       from: '"Ayoola Olumide" <ayoolaolumide98@gmail.com>',
       to: email,
       subject: "Reset Password",
-      html: `<a href="${resetURL}"><button>Rest Password</button></a>`, // HTML body
+      html: passwordResetTemplate(resetURL, email), // HTML body
     });
   
     console.log("Reset Message sent:", info.messageId);
