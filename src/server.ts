@@ -14,6 +14,7 @@ import { Auth } from './controllers/AuthControllers';
 import { userRouter } from './routes/userRoute';
 import { articleRouter } from './routes/articleRoute';
 import jwt from 'jsonwebtoken';
+import { migratePosts } from './DB/migrate';
 
 declare module 'express-session' {
   interface SessionData {
@@ -169,7 +170,14 @@ app.get ('/contact', (req, res) => {
 
 app.use('/article', articleRouter);
 app.use('/user', isSignedIn, userRouter);
+
+//catch all not found route
+app.use((req, res) => {
+  res.render('404');
+});
+
 app.listen(process.env.PORT, () => {
   connectDB();
+  // migratePosts();
   console.log('server is running on port', process.env.PORT);
 });

@@ -143,7 +143,10 @@ document.addEventListener('DOMContentLoaded', async function () {
       // Set username
       if (usernameWelcome && userData.name) {
           usernameWelcome.textContent = `Hello, ${userData.name}`;
-          usernameWelcome.style.display = 'inline';
+          if(window.innerWidth > 768){
+            usernameWelcome.style.display = 'inline';
+          }
+          
       }
       if (dropdownUsername && userData.name) {
           dropdownUsername.textContent = userData.name;

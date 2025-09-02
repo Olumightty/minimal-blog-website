@@ -143,7 +143,7 @@
                     <!-- Related Articles -->
                     <div class="sidebar-card recommendations-card">
                         <div class="card-header">
-                            <h3 class="card-title">More in Design</h3>
+                            <h3 class="card-title">More in <%= post.category.charAt(0).toUpperCase() + post.category.slice(1) %></h3>
                             <div class="card-icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
@@ -151,38 +151,22 @@
                             </div>
                         </div>
                         <div class="recommendations-list">
-                            <article class="recommendation-item">
-                                <div class="recommendation-image-wrapper">
-                                    <img src="/api/placeholder/100/75" alt="Typography" class="recommendation-image">
-                                </div>
-                                <div class="recommendation-content">
-                                    <h4 class="recommendation-title">The Revival of Typography</h4>
-                                    <p class="recommendation-excerpt">How carefully selected fonts can transform your content.</p>
-                                    <a href="#" class="recommendation-link">Read article →</a>
-                                </div>
-                            </article>
+                            <% if(morePosts) { morePosts.forEach(function (relatedArticle) { %>
+                                <article class="recommendation-item">
+                                    <div class="recommendation-image-wrapper">
+                                        <img src="<%= relatedArticle.imageUrl %>" alt="<%= relatedArticle.title %>" class="recommendation-image">
+                                    </div>
+                                    <div class="recommendation-content">
+                                        <h4 class="recommendation-title"><%= relatedArticle.title %></h4>
+                                        <p class="recommendation-excerpt"><%= relatedArticle.excerpt %></p>
+                                        <a href="/article/<%= relatedArticle.slug %>" class="recommendation-link">Read article →</a>
+                                    </div>
+                                </article>
+                             <% })} else { %>
+                                <p>No related articles found.</p>
+                             <% } %>
                             
-                            <article class="recommendation-item">
-                                <div class="recommendation-image-wrapper">
-                                    <img src="/api/placeholder/100/75" alt="Analog Design" class="recommendation-image">
-                                </div>
-                                <div class="recommendation-content">
-                                    <h4 class="recommendation-title">The Return to Analog</h4>
-                                    <p class="recommendation-excerpt">Digital artists incorporating analog tools into workflows.</p>
-                                    <a href="#" class="recommendation-link">Read article →</a>
-                                </div>
-                            </article>
-                            
-                            <article class="recommendation-item">
-                                <div class="recommendation-image-wrapper">
-                                    <img src="/api/placeholder/100/75" alt="UX Design" class="recommendation-image">
-                                </div>
-                                <div class="recommendation-content">
-                                    <h4 class="recommendation-title">UX Design in 2025</h4>
-                                    <p class="recommendation-excerpt">New approaches to intuitive user experiences.</p>
-                                    <a href="#" class="recommendation-link">Read article →</a>
-                                </div>
-                            </article>
+                             
                         </div>
                     </div>
 
@@ -222,7 +206,7 @@
         </div>
         
         <!-- Mobile Recommendations -->
-        <section class="mobile-recommendations">
+        <!-- <section class="mobile-recommendations">
             <div class="container">
                 <h3 class="mobile-recommendations-title">More Articles</h3>
                 <div class="mobile-recommendations-grid">
@@ -251,7 +235,7 @@
                     </article>
                 </div>
             </div>
-        </section>
+        </section> -->
     </main>
 
     <!-- Toast Notification -->

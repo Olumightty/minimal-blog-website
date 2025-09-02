@@ -1,35 +1,44 @@
-<aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="user-preview">
-        <img src="" alt="User Avatar" class="sidebar-avatar">
-        <div class="user-info">
-          <h3></h3>
-          <span class="user-role">Writer</span>
-        </div>
+<link rel="stylesheet" href="/stylesheets/profile-sidebar.css">
+<!-- Mobile menu toggle button -->
+<button class="sidebar-mobile-menu-toggle" id="sideBarMobileMenuToggle" aria-label="Toggle sidebar">
+  →
+</button>
+
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="user-preview">
+      <img src="" alt="User Avatar" class="sidebar-avatar">
+      <div class="user-info">
+        <h3></h3>
+        <span class="user-role">Writer</span>
       </div>
     </div>
-    <nav class="sidebar-nav">
-      <ul>
-        <li ><a class="active" href="/user/profile"><span class="icon">👤</span> Profile</a></li>
-        <!-- <li><a href="/user/settings"><span class="icon">⚙️</span> Settings</a></li> -->
-        <li><a href="/user/articles"><span class="icon">📝</span> My Articles</a></li>
-        <li><a href="/user/drafts"><span class="icon">📋</span> Drafts</a></li>
-        <!-- <li><a href="/user/stats"><span class="icon">📊</span> Statistics</a></li>
-        <li><a href="/user/bookmarks"><span class="icon">🔖</span> Bookmarks</a></li>
-        <li><a href="/user//notifications"><span class="icon">🔔</span> Notifications</a></li> -->
-      </ul>
-    </nav>
-    <div class="sidebar-footer">
-      <!-- <a href="/help" class="help-link"><span class="icon">❓</span> Help Center</a> -->
-      <a href="/logout" class="logout-link"><span class="icon">🚪</span> Log Out</a>
-    </div>
-  </aside>
-
+  </div>
+  <nav class="sidebar-nav">
+    <ul>
+      <li><a class="active" href="/user/profile"><span class="icon">👤</span> Profile</a></li>
+      <!-- <li><a href="/user/settings"><span class="icon">⚙️</span> Settings</a></li> -->
+      <li><a href="/user/articles"><span class="icon">📝</span> My Articles</a></li>
+      <li><a href="/user/drafts"><span class="icon">📋</span> Drafts</a></li>
+      <!-- <li><a href="/user/stats"><span class="icon">📊</span> Statistics</a></li>
+      <li><a href="/user/bookmarks"><span class="icon">🔖</span> Bookmarks</a></li>
+      <li><a href="/user//notifications"><span class="icon">🔔</span> Notifications</a></li> -->
+    </ul>
+  </nav>
+  <div class="sidebar-footer">
+    <!-- <a href="/help" class="help-link"><span class="icon">❓</span> Help Center</a> -->
+    <a href="/logout" class="logout-link"><span class="icon">🚪</span> Log Out</a>
+  </div>
+</aside>
 
 <script>
-  
   document.addEventListener('DOMContentLoaded', async function() {
     const avatarImage = document.querySelector('.sidebar-avatar');
+    
+    // Original avatar loading functionality
     try {
       const response = await fetch('/user/avatar', {
         method: 'GET',
@@ -41,11 +50,12 @@
       if(data.avatar) avatarImage.setAttribute('src', data.avatar);
       if(data.name) document.querySelector('.user-info h3').textContent = data.name;
     } catch (error) {
-      showError('Failed to load avatar');
+      console.error('Failed to load avatar');
     }
 
+    // Original navigation active state functionality
     const navLinks = document.querySelectorAll('.sidebar-nav a');
-    const currentPath = window.location.pathname
+    const currentPath = window.location.pathname;
     
     navLinks.forEach(link => {
       if (`/${currentPath}`.includes(link.getAttribute('href'))) {
@@ -54,7 +64,64 @@
         link.classList.remove('active');
       }
     });
-     // Get the first part of the path;
-  })
-  
+
+    // New responsive functionality
+    const mobileMenuToggle = document.getElementById('sideBarMobileMenuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    // Toggle sidebar on mobile
+    function toggleSidebar() {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('show');
+      mobileMenuToggle.classList.toggle('active');
+      
+      // Prevent body scroll when sidebar is open on mobile
+      if (sidebar.classList.contains('open')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Close sidebar
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('show');
+      mobileMenuToggle.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Event listeners
+    if (mobileMenuToggle) {
+      mobileMenuToggle.addEventListener('click', toggleSidebar);
+    }
+    
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener('click', closeSidebar);
+    }
+
+    // Close sidebar when clicking on navigation links on mobile
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          closeSidebar();
+        }
+      });
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        closeSidebar();
+      }
+    });
+
+    // Close sidebar on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeSidebar();
+      }
+    });
+  });
 </script>

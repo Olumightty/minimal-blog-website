@@ -1,5 +1,5 @@
 import { slugify } from '../lib/helpers';
-import { blogPosts } from './initialContent';
+import blogPosts from './mock_posts.json';
 import { Post } from './schemas';
 
 //for initial db setup

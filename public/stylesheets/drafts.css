@@ -51,7 +51,8 @@ a:hover {
   }
   
   .page-header h1 {
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: 700;
     color: #333;
     margin: 0;
   }
@@ -398,12 +399,20 @@ a:hover {
     .header-actions {
       flex-direction: column;
       align-items: flex-start;
+      width: 100%;
       gap: 10px;
     }
-    
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
     .search-container {
       width: 100%;
     }
+    
     
     .drafts-stats {
       flex-direction: column;

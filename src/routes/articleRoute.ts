@@ -87,6 +87,18 @@ articleRouter.get('/:slug', async (req, res) => {
 
     if (!post) {
       res.status(404).render('404');
+    }
+
+    const morePosts = await Post.find({
+      category: post?.category,
+      status: 'published',
+      _id: { $ne: post?._id },
+    })
+      .limit(3)
+      .sort({ created_at: -1 });
+    // console.log(more_posts);
+    if (morePosts) {
+      res.render('article/articlePage', { post, morePosts });
     } else {
       res.render('article/articlePage', { post });
     }
